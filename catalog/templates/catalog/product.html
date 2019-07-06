@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags wagtailimages_tags %}
+
+{% load basket_tags %}
+
+{% load longclawcore_tags %}
+
+{% block body_class %} template-productpage {%endblock%}
+
+{% block content %}
+<div class="product_content row no-gutters">
+    <div class="image col-2">
+        {% if page.images %}
+        <div id="thumbs" style="float: left; margin: 10px">
+        {% for item in page.images.all %}
+            {% image item.image fill-100x100 %}
+            <p>{{ item.caption }}</p>
+
+        {% endfor %}
+        </div>
+        {% else %}
+        <img style="width: 450px; background-color: #ECEFF1;" src="..."/>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-5">
+        <img id="largeImage" width="300" height="300">
+    </div>
+
+    <div class="product_content_info col-5">
+        <h1 class="product_title">{{ page.title }}</h1>
+        <div class="product_description">{{ page.description|richtext }}</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+        {% if page.variants.all.count > 1 %}
+        <select id="variant-select">
+            {% for variant in page.variants.all %}
+            <option value="{{variant.id}}" stock="{{variant.stock}}" {% if variant.stock < 1 %}disabled{%else%}{%endif%}>{{variant.ref}} - {{variant.price}}</option>
+            {% endfor %}
+        </select>
+        <div>
+            <button type="button" id="sub" class="sub">-</button>
+            <input type="number" id="multi_variant_qty_cart" value="1" min="1" max="10"/>
+            <button type="button" id="add" class="add">+</button>
+        </div>
+        <button id="add-to-basket-btn">Add To Basket</button>
+
+        {% else %}
+
+            {% for variant in page.variants.all %}
+            {% if variant.stock > 0 %}
+            <button id="add-to-basket-btn" value="{{variant.id}}" stock="{{variant.stock}}">Add To Basket</button>
+            {{variant.price}}
+            <p>{{variant.gluten_free}}</p>
+            <div>
+                <button type="button" id="sub" class="sub">-</button>
+                <input type="number" id="qty_cart" value="1" min="1" max="{% if variant.stock > 10 %} 10{%else%}{{variant.stock}}{%endif%}"/>
+                <button type="button" id="add" class="add">+</button>
+            </div>
+            {% else %}
+            <span class="label label-danger">Sold out</span>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <h1>{{page.variants.all.stock}}</h1>
+
+    </div>
+</div>
+{% if page.tags.all.count %}
+<div class="tags">
+    <h3>Tags</h3>
+    {% for tag in page.tags.all %}
+    <a href="{% slugurl 'tags' %}?tag={{ tag }}">
+        <button type="button">{{ tag }}</button>
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+<p><a href="{{ page.get_parent.url }}">Return</a></p>
+
+
+
+{% longclaw_vendors_bundle %}
+{% longclaw_client_bundle %}
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+
+    const btn_cart = document.getElementById('add-to-basket-btn');
+
+
+    const variant_select = document.getElementById('variant-select');
+
+    console.log(variant_select);
+
+    const variantId = $('#add-to-basket-btn').val();
+
+    const maxAtt = $('#multi_variant_qty_cart').attr("max") == null ? $('#qty_cart').attr("max") : $('#multi_variant_qty_cart').attr("max") ;
+
+
+
+
+        btn_cart.addEventListener("click", (e) => {
+            e.preventDefault();
+            const variant_id = variant_select == null ? variantId : variant_select.options[variant_select.selectedIndex].value;
+            console.log(variant_id);
+
+
+            const quantity = $('#multi_variant_qty_cart').val() == null ? Number($('#qty_cart').val()) : Number($('#multi_variant_qty_cart').val());
+
+
+            const multi_variant_stock = $('#variant-select').find(':selected').attr("stock");
+            const stock = multi_variant_stock == null ? Number($('#add-to-basket-btn').attr("stock")) : Number(multi_variant_stock);
+
+            if(stock >= quantity){
+              longclawclient.basketList.post({
+                prefix: "{% longclaw_api_url_prefix %}",
+                data: { variant_id, quantity:quantity }
+            });
+          }else{
+            window.alert("Stock left"+multi_variant_stock);
+          }
+      });
+
+
+
+        $(document).ready(function() {
+           $('#largeImage').attr('src',$('#thumbs img').attr('src').replace('thumb','large'));
+       });
+
+        $('#thumbs img').click(function(){
+            $('#largeImage').attr('src',$(this).attr('src').replace('thumb','large'));
+
+        });
+
+        $('.add').click(function () {
+            if ($(this).prev().val() < Number(maxAtt)) {
+                $(this).prev().val(+$(this).prev().val() + 1);
+            }
+        });
+        $('.sub').click(function () {
+            if ($(this).next().val() > 1) {
+                if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+            }
+        });
+
+</script>
+
+
+{% endblock %}
+

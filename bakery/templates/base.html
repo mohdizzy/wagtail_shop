@@ -1,0 +1,71 @@
+{% load static wagtailuserbar %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>{% block title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock %}{% block title_suffix %}{% endblock %}</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# Global stylesheets #}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/bakery.css' %}">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        {% block extra_css %}
+            {# Override this in templates to add extra stylesheets #}
+        {% endblock %}
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+        <div class="layout">
+        {% wagtailuserbar %}
+        <div class="header">
+            <div class="header">
+                <div class="nav-left">
+                    <a class="nav-brand" href="/">Longclaw Bakery</a>
+                    <a href="/products">Products</a>
+                </div>
+
+                <div class="nav-right">
+                    <a href="{% url 'longclaw_basket' %}"><span id="basket-item-count"> </span><i
+                            class="fas fa-shopping-basket fa-lg" aria-hidden="true"></i>Basket</a>
+                </div>
+
+                <div>
+                    <ul class="nav navbar-nav navbar-right">
+                            {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}" class="btn btn-simple">Log out</a></li>
+                        <li><a href="{% url 'order' %}" class="btn btn-simple">Orders</a></li>
+                            {% else %}
+
+                                  <li><a href="{% url 'login' %}" class="btn btn-simple">Log in</a></li>
+                                  <li><a href="{% url 'signup' %}" class="btn btn-simple">Sign up</a></li>
+                            {% endif %}
+                        </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="main">
+        {% block content %}{% endblock %}
+        </div>
+        </div>
+        {# Global javascript #}
+        <script type="text/javascript" src="{% static 'js/bakery.js' %}"></script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script type="text/javascript"></script>
+        {% block extra_js %}
+            {# Override this in templates to add extra javascript #}
+        {% endblock %}
+    </body>
+</html>

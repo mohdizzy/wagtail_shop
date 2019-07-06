@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load longclawcheckout_tags longclawcore_tags %}
+
+{% block content %}
+{#
+`checkout_form`, `shipping_form`, `billing_form`, `basket` and `total_price` are the context
+variables available for you to build up your checkout page.
+`checkout_form` includes the `different_billing_address` checkbox which you can use to
+decide whether to display `billing_form` or not (javascript needed here!).
+`checkout_form` also includes the `shipping_option` dropdown which should be initialized
+using the `initShippingOption` javascript function.
+The aforementioned fields are optional (different_billing_address and shipping_option); if you dont
+offer shipping/it is fixed rate you can prevent these fields from being displayed.
+The only required field in `checkout_form` is `email`.
+
+`shipping_form` gathers the address. `billing_form` is the same (but intended to gather a billing address).
+`billing_form` is optional; you may not require it, or a gateway integration dropin may gather it instead.
+
+`basket` is a queryset of `BasketItem` for the current customer.
+`total_price` is the total cost of all items in the basket.
+#}
+
+<form action="." method="post" id="checkout-form">
+    {% csrf_token %}
+    {% for field in shipping_form %}
+        {% if field.is_hidden %}
+        {{ field }}
+        {% else %}
+        {% if field.errors %}
+        <div class="field error"></div>
+        {% else %}
+        <div class="field">
+        {% endif %}
+            <label>{{ field.label_tag }}</label>
+            {{ field }}
+            {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+            <div class="ui error message">
+                <p>{{ field.errors }}</p>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+    {% for field in checkout_form %}
+    <!-- purposefully ignoring different billing address option to simplify -->
+    {% if field.name == 'different_billing_address' %}
+    {% else %}
+    {% if field.errors %}
+    <div class="field error"></div>
+    {% else %}
+    <div class="field">
+    {% endif %}
+        <label>{{ field.label_tag }}</label>
+        {{ field }}
+        <div class="ui error message">
+            {% for error in field.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+    {% for key,value in razorpay.items %}
+    {% if key == "id" %}
+    <script
+    src="https://checkout.razorpay.com/v1/checkout.js"
+    data-key="rzp_test_zr7aWLZBEglyr3"
+    data-amount="59900"
+    data-order_id={{ value }}
+    data-currency="INR"
+    data-buttontext="Pay with Razorpay"
+    data-name="Merchant Name"
+    data-description="Purchase Description"
+    data-image=""
+    data-prefill.name="Longclaw"
+    data-prefill.email="test@test.com"
+    data-theme.color="#F37254"
+></script>
+    {% endif %}
+    {% endfor %}
+    <input type="hidden" value="Hidden Element" name="hidden">
+</form>
+
+
+{% endblock content %}
+
+{% block extra_js %}
+{% endblock %}
+{#
+Load any client javascript provided by the payment gateway.
+This will give a list of <script/> tags which load the client SDK's.
+An integration might have more than 1 SDK - e.g. braintree offers
+'dropin' and 'hostedfields'. A user should be able to rely on all
+possibilities being loaded or refer to individual gateway documentation.
+#}
+
+
+{% gateway_client_js as scripts %}
+{% for js in scripts %}
+
+{{ js|safe }}
+{% endfor %}
+
+{#
+Finally add the media from the checkout form. This provides the ``initShippingOption`` function
+which will initialize the shipping option dropdown on the checkout form
+#}
+
+
+{{ checkout_form.media }}
+
