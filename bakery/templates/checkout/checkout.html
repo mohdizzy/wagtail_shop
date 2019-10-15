@@ -22,6 +22,9 @@ The only required field in `checkout_form` is `email`.
 
 <form action="." method="post" id="checkout-form">
     {% csrf_token %}
+    {% if user.is_authenticated %}
+        {{shipping_form.name.value|stringformat:'ssample'}}
+    {%endif%}
     {% for field in shipping_form %}
         {% if field.is_hidden %}
         {{ field }}
@@ -42,6 +45,9 @@ The only required field in `checkout_form` is `email`.
         </div>
         {% endif %}
     {% endfor %}
+
+
+
     {% for field in checkout_form %}
     <!-- purposefully ignoring different billing address option to simplify -->
     {% if field.name == 'different_billing_address' %}

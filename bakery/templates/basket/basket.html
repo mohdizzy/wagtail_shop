@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags account %}
 
 {% load basket_tags %}
 {% load longclawcheckout_tags longclawcore_tags %}
@@ -27,6 +27,9 @@
 <br>
 {% endfor %}
 
+{% if not user.is_authenticated %}
+<a href="{% url 'account_signup' %}">Sign-up</a>
+{% endif %}
 
 <a href="{% url 'longclaw_checkout_view' %}">Checkout</a>
 <a href="/">Products</a>

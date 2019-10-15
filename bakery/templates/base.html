@@ -1,4 +1,4 @@
-{% load static wagtailuserbar %}
+{% load static wagtailuserbar account%}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -40,12 +40,13 @@
                 <div>
                     <ul class="nav navbar-nav navbar-right">
                             {% if user.is_authenticated %}
-                        <li><a href="{% url 'logout' %}" class="btn btn-simple">Log out</a></li>
+                        <li><a href="{% url 'account_logout' %}" class="btn btn-simple">Log out</a></li>
                         <li><a href="{% url 'order' %}" class="btn btn-simple">Orders</a></li>
+                        <li><p>{% user_display user %}</p></li>
                             {% else %}
 
-                                  <li><a href="{% url 'login' %}" class="btn btn-simple">Log in</a></li>
-                                  <li><a href="{% url 'signup' %}" class="btn btn-simple">Sign up</a></li>
+                                  <li><a href="{% url 'account_login' %}" class="btn btn-simple">Log in</a></li>
+                                  <li><a href="{% url 'account_signup' %}" class="btn btn-simple">Sign up</a></li>
                             {% endif %}
                         </ul>
                 </div>
@@ -57,6 +58,23 @@
         {% block content %}{% endblock %}
         </div>
         </div>
+
+
+        <!-- Footer -->
+        <div class="card text-center">
+            <div class="card-header">
+                Featured
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+        </div>
+
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/bakery.js' %}"></script>
 
