@@ -7,13 +7,58 @@
 
 {% block content%}
 
-<div id="basket_items">
+<div class="container">
+    {% for item in basket %}
+    <div class="card mb-3" style="max-width: 540px;">
+        <div class="row no-gutters">
+            <div class="col-md-4 d-block mx-auto">
+                {% for img in item.variant.product.first_image %}
+                {% if img.caption == item.variant.ref %}
+                {% image img.image fill-150x150 %}
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.variant.ref }}</h5>
+                    <p class="card-text"></p>
+                    <button href="" class="delcart" data-quantity="{{item.quantity}}"
+                            data-variant="{{item.variant.id}}">Minus
+                    </button>
+                    <span class="card-text"><small class="text-muted">{{ item.quantity }}</small></span>
+                    <button href="" class="addcart" data-quantity="{{item.quantity}}"
+                            data-variant="{{item.variant.id}}">add
+                    </button>
+                    <p class="card-text"><small class="text-muted">{{ item.variant.price }}</small></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% if basket.count == 0 %}
+        <p>Your basket is empty</p>
+    {% else %}
+        <span>Sub-total({{basket.count}}):{{total_price}}</span>
+    {% endif %}
+</div>
+
+
+<!--<div id="basket_items">
     {% for item in basket %}
     <p id="basket-item-count">{{ item.quantity }}</p>
     {{ item.variant.price }}
+    {{ item.variant.ref }}
+
+    {% for img in item.variant.product.first_image %}
+    {% if img.caption == item.variant.ref %}
+    {% image img.image fill-100x100 %}
+    {% endif %}
+    {% endfor %}
+
+
     {{ item.variant.stock }}
     {{ item.variant.ref }}
-    {{ item.variant.product.title }}
     {{ item.variant.product.description }}
     {{ item.variant.id}}
     <button href="" class="delcart" data-quantity="{{item.quantity}}"
@@ -25,7 +70,7 @@
 </div>
 
 <br>
-{% endfor %}
+{% endfor %}-->
 
 {% if not user.is_authenticated %}
 <a href="{% url 'account_signup' %}">Sign-up</a>
@@ -82,6 +127,7 @@
         });
 
     });
+
 
 
 </script>

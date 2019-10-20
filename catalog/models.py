@@ -25,7 +25,7 @@ class Product(ProductBase):
 
     @property
     def first_image(self):
-        return self.images.first()
+        return self.images.all()
 
 
 class ProductVariant(ProductVariantBase):

@@ -23,42 +23,44 @@
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
-        <div class="layout">
-        {% wagtailuserbar %}
-        <div class="header">
-            <div class="header">
-                <div class="nav-left">
-                    <a class="nav-brand" href="/">Longclaw Bakery</a>
-                    <a href="/products">Products</a>
-                </div>
 
-                <div class="nav-right">
-                    <a href="{% url 'longclaw_basket' %}"><span id="basket-item-count"> </span><i
-                            class="fas fa-shopping-basket fa-lg" aria-hidden="true"></i>Basket</a>
-                </div>
 
-                <div>
-                    <ul class="nav navbar-nav navbar-right">
-                            {% if user.is_authenticated %}
-                        <li><a href="{% url 'account_logout' %}" class="btn btn-simple">Log out</a></li>
-                        <li><a href="{% url 'order' %}" class="btn btn-simple">Orders</a></li>
-                        <li><p>{% user_display user %}</p></li>
-                            {% else %}
-
-                                  <li><a href="{% url 'account_login' %}" class="btn btn-simple">Log in</a></li>
-                                  <li><a href="{% url 'account_signup' %}" class="btn btn-simple">Sign up</a></li>
-                            {% endif %}
-                        </ul>
-                </div>
-
-            </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/">Longclaw Bakery</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Pricing</a>
+                </li>
+            </ul>
+    <span class="navbar-text">
+      <div><a href="{% url 'longclaw_basket' %}"><img src="{% static "images/shopping-cart.svg" %}" width="25" height="25"></a>
+            {% if user.is_authenticated %}
+                &nbsp;&nbsp;<span>Hello, {% user_display user %}</span>
+                <a href="{% url 'account_logout' %}" class="btn btn-simple">Log out</a>
+                <a href="{% url 'order' %}" class="btn btn-simple">Orders</a>
+            {% else %}
+                <a href="{% url 'account_login' %}" class="btn btn-simple">Log in</a>
+                <a href="{% url 'account_signup' %}" class="btn btn-simple">Sign up</a>
+            {% endif %}
         </div>
+    </span>
+        </div>
+    </nav>
 
-        <div class="main">
+
+    <div class="main">
         {% block content %}{% endblock %}
-        </div>
-        </div>
-
 
         <!-- Footer -->
         <div class="card text-center">

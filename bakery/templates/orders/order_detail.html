@@ -4,7 +4,53 @@
 
 {% block content%}
 
+{% regroup orders_user by order_id as order_details %}
+{% for orders in order_details %}
+<div class="container">
+    <div class="card w-75 text-center mx-auto">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-3 text-left text-muted">Order placed<br>{{orders.list.0.order.payment_date}}</div>
+                <div class="col-md-3 text-left text-muted">Total<br>{{orders.list.0.total}}</div>
+                <div class="col-md-3 text-right text-muted">Order#<br>{{orders.list.0.order_id}}</div>
+                <div class="col-md-3 text-muted">
+                    {% for tup in orders.list.0.order.ORDER_STATUSES %}
+                    {% if tup.0 == orders.list.0.order.status %}
+                    Status<br>{{tup.1}}
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {%for item in orders.list%}
+                <div class="col-md-3">
+                    {% for img in item.product.first_image %}
+                    {% if img.caption == item.product.ref %}
+                    {% image img.image fill-100x100 %}
+                    <br><br>
+                    {% endif %}
+                    {% endfor %}
+                </div>
 
+                <div class="col-md-6 text-left">
+                    <span>{{item.product.ref}}</span>
+                    <br>
+                    <span class="text-muted">Qty:{{item.quantity}}</span>
+                </div>
+                <div class="col-md-3">{{item.status}}</div>
+                {% endfor %}
+            </div>
+            <h5 class="card-title"></h5>
+            <p class="card-text"></p>
+        </div>
+    </div>
+    <br>
+</div>
+{% endfor %}
+
+<!--
 <div>
     {% regroup orders_user by order_id as country_list %}
 
@@ -16,9 +62,14 @@
         {%for ite in od.list%}
         <li>{{ite.product}}</li>
         <li>{{ite.quantity}}</li>
+        {% for img in ite.product.first_image %}
+        {% if img.caption == ite.product.ref %}
+        {% image img.image fill-100x100 %}
+        {% endif %}
+        {% endfor %}
         {%endfor%}
     </ul>
-{% endfor %}
+{% endfor %}-->
 
 
 </div>

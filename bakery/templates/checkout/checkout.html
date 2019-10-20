@@ -2,7 +2,7 @@
 {% load longclawcheckout_tags longclawcore_tags %}
 
 {% block content %}
-{#
+<!--{#
 `checkout_form`, `shipping_form`, `billing_form`, `basket` and `total_price` are the context
 variables available for you to build up your checkout page.
 `checkout_form` includes the `different_billing_address` checkbox which you can use to
@@ -18,12 +18,12 @@ The only required field in `checkout_form` is `email`.
 
 `basket` is a queryset of `BasketItem` for the current customer.
 `total_price` is the total cost of all items in the basket.
-#}
+#}-->
 
 <form action="." method="post" id="checkout-form">
     {% csrf_token %}
     {% if user.is_authenticated %}
-        {{shipping_form.name.value|stringformat:'ssample'}}
+        {{shipping_form.name.value|stringformat:'mohd'}}
     {%endif%}
     {% for field in shipping_form %}
         {% if field.is_hidden %}

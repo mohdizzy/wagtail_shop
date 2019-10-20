@@ -1,1 +1,14 @@
 {% extends "base.html" %}
+
+
+{% load wagtailcore_tags wagtailimages_tags account %}
+
+{% load longclawcore_tags %}
+
+{% block content%}
+
+<p>Thank you for placing the order.</p>
+<p>ID:{{order.id}}</p>
+
+
+{% endblock %}
