@@ -1,4 +1,5 @@
 {% load static wagtailuserbar account%}
+{% load basket_tags %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -12,10 +13,15 @@
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+        <!--Google font -->
+        <link href="https://fonts.googleapis.com/css?family=Titillium+Web&display=swap" rel="stylesheet">
+
         {# Global stylesheets #}
         <link rel="stylesheet" type="text/css" href="{% static 'css/bakery.css' %}">
 
+        <!--Bootstrap -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
 
         {% block extra_css %}
             {# Override this in templates to add extra stylesheets #}
@@ -26,32 +32,45 @@
 
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Longclaw Bakery</a>
+    <nav class="navbar navbar-expand-lg navbar-light top-nav-color">
+        <a class="navbar-brand" href="/"  style="color:#FFFFFF">Brand</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/products">Products</a>
+                    <a class="nav-link" href="/products" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
+                    <a class="nav-link" href="#" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Pricing</a>
                 </li>
             </ul>
     <span class="navbar-text">
-      <div><a href="{% url 'longclaw_basket' %}"><img src="{% static "images/shopping-cart.svg" %}" width="25" height="25"></a>
+      <div>
+
+          <a href="{% url 'longclaw_basket' %}">
+              <span style="color: #FC814A;font-size: 8pt" class="align-top text-right">{{basket.count}}</span>
+              <img src="{% static "images/shopping-cart.svg" %}" width="25" height="25"></a>
             {% if user.is_authenticated %}
-                &nbsp;&nbsp;<span>Hello, {% user_display user %}</span>
-                <a href="{% url 'account_logout' %}" class="btn btn-simple">Log out</a>
-                <a href="{% url 'order' %}" class="btn btn-simple">Orders</a>
+                &nbsp;&nbsp;<span class="secondary-color">Hello, {% user_display user %}</span>
+                <a href="{% url 'account_logout' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Log out</a>
+                <a href="{% url 'order' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Orders</a>
+                <a href="{% url 'account-details' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Account</a>
             {% else %}
-                <a href="{% url 'account_login' %}" class="btn btn-simple">Log in</a>
-                <a href="{% url 'account_signup' %}" class="btn btn-simple">Sign up</a>
+                <a href="{% url 'account_login' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Log in</a>
+                <a href="{% url 'account_signup' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Sign up</a>
             {% endif %}
         </div>
     </span>
@@ -64,16 +83,44 @@
 
         <!-- Footer -->
         <div class="card text-center">
-            <div class="card-header">
-                Featured
+            <div class="card-body top-nav-color">
+                <div class="row font-titillium" style="color: #FFFFFF">
+                    <div class="col-md-2">
+                        Link 1
+                        <br>Link 2
+                        <br>Link 3
+                    </div>
+                    <div class="col-md-2">
+                        Link 1
+                        <br>Link 2
+                        <br>Link 3
+                    </div>
+                    <div class="col-md-2">
+                        Link 1
+                        <br>Link 2
+                        <br>Link 3
+                    </div>
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <div class="container">
+                            <div class="thumbnail center well well-small text-center">
+                                <p>Sign up for news, promotions.</p>
+
+                                <form action="" method="post">
+                                    <div class="input-prepend"><span class="add-on"><i class="icon-envelope"></i></span>
+                                        <input type="text" id="" name="" placeholder="your@email.com">
+                                    </div>
+                                    <br/>
+                                    <input type="submit" value="Subscribe Now!" class="btn btn-primary btn-simple"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="card-text"></p>
             </div>
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-            <div class="card-footer text-muted">
-                2 days ago
+            <div class="card-footer text-muted" style="background-color: #3C0000">
+                <span style="color: #FFFFFF">&#x24B8; 2019, BRAND.</span>
             </div>
         </div>
 
@@ -82,6 +129,7 @@
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script type="text/javascript"></script>
         {% block extra_js %}

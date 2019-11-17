@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load longclawcheckout_tags longclawcore_tags %}
+{% load longclawcheckout_tags longclawcore_tags crispy_forms_tags%}
 
 {% block content %}
 <!--{#
@@ -19,80 +19,97 @@ The only required field in `checkout_form` is `email`.
 `basket` is a queryset of `BasketItem` for the current customer.
 `total_price` is the total cost of all items in the basket.
 #}-->
+<br><br><br><br>
+<div class="container font-titillium">
 
-<form action="." method="post" id="checkout-form">
-    {% csrf_token %}
-    {% if user.is_authenticated %}
-        {{shipping_form.name.value|stringformat:'mohd'}}
-    {%endif%}
-    {% for field in shipping_form %}
-        {% if field.is_hidden %}
-        {{ field }}
-        {% else %}
-        {% if field.errors %}
-        <div class="field error"></div>
-        {% else %}
-        <div class="field">
-        {% endif %}
-            <label>{{ field.label_tag }}</label>
-            {{ field }}
-            {% if field.help_text %}
-                <p class="help">{{ field.help_text|safe }}</p>
-            {% endif %}
-            <div class="ui error message">
-                <p>{{ field.errors }}</p>
-            </div>
-        </div>
-        {% endif %}
-    {% endfor %}
+            <form action="." method="post" id="checkout-form">
+                {% csrf_token %}
+                {% if user.is_authenticated %}
+                {{shipping_form.name.value|stringformat:'mohd'}}
+                {%endif%}
+                {% for field in shipping_form %}
+                {% if field.is_hidden %}
+                {{ field }}
+                {% else %}
+                {% if field.errors %}
+                <div class="field error"></div>
+                {% else %}
+                <div class="field">
+                    {% endif %}
+                    <!--<label>{{ field.label_tag }}</label>-->
+                    {{ field|as_crispy_field }}
+                    {% if field.help_text %}
+                    <p class="help">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                    <div class="ui error message">
+                        <p>{{ field.errors }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
 
 
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{stored_address.name}}</h5>
+                        <p class="card-text">{{stored_address.city}}</p>
+                        <p class="card-text">{{stored_address.country}}</p>
+                    </div>
+                </div>
 
-    {% for field in checkout_form %}
-    <!-- purposefully ignoring different billing address option to simplify -->
-    {% if field.name == 'different_billing_address' %}
-    {% else %}
-    {% if field.errors %}
-    <div class="field error"></div>
-    {% else %}
-    <div class="field">
-    {% endif %}
-        <label>{{ field.label_tag }}</label>
-        {{ field }}
-        <div class="ui error message">
-            {% for error in field.errors %}
-            <p>{{ error }}</p>
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
-    {% endfor %}
 
-    {% for key,value in razorpay.items %}
-    {% if key == "id" %}
-    <script
-    src="https://checkout.razorpay.com/v1/checkout.js"
-    data-key="rzp_test_zr7aWLZBEglyr3"
-    data-amount="59900"
-    data-order_id={{ value }}
-    data-currency="INR"
-    data-buttontext="Pay with Razorpay"
-    data-name="Merchant Name"
-    data-description="Purchase Description"
-    data-image=""
-    data-prefill.name="Longclaw"
-    data-prefill.email="test@test.com"
-    data-theme.color="#F37254"
-></script>
-    {% endif %}
-    {% endfor %}
-    <input type="hidden" value="Hidden Element" name="hidden">
-</form>
+                {% for field in checkout_form %}
+                <!-- purposefully ignoring different billing address option to simplify -->
+                {% if field.name == 'different_billing_address' %}
+                {% else %}
+                {% if field.errors %}
+                <div class="field error"></div>
+                {% else %}
+                <div class="field">
+                    {% endif %}
+                    <label>{{ field.label_tag }}</label>
+                    {{ field }}
+                    <div class="ui error message">
+                        {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+
+
+                {% for key,value in razorpay.items %}
+                {% if key == "id" %}
+                <script class="razorpay_payment_button"
+                        src="https://checkout.razorpay.com/v1/checkout.js"
+                        data-key="rzp_test_zr7aWLZBEglyr3"
+                        data-amount="59900"
+                        data-order_id={{ value }}
+                        data-currency="INR"
+                        data-buttontext="Pay with Razorpay"
+                        data-name="Merchant Name"
+                        data-description="Purchase Description"
+                        data-image=""
+                        data-prefill.name="Longclaw"
+                        data-prefill.email="{{user}}"
+                        data-theme.color="#F37254"
+
+                ></script>
+                {% endif %}
+                {% endfor %}
+                <input type="hidden" value="Hidden Element" name="hidden">
+
+            </form>
+
+</div>
 
 
 {% endblock content %}
 
 {% block extra_js %}
+
+
 {% endblock %}
 {#
 Load any client javascript provided by the payment gateway.

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags account %}
+{% load static wagtailcore_tags wagtailimages_tags account %}
 
 {% load basket_tags %}
 {% load longclawcheckout_tags longclawcore_tags %}
@@ -8,40 +8,76 @@
 {% block content%}
 
 <div class="container">
+    <h2>SHOPPING CART</h2>
     {% for item in basket %}
-    <div class="card mb-3" style="max-width: 540px;">
+    <div class="card w-70 font-titillium">
         <div class="row no-gutters">
-            <div class="col-md-4 d-block mx-auto">
+            <div class="col-md-3 d-block mx-auto">
                 {% for img in item.variant.product.first_image %}
                 {% if img.caption == item.variant.ref %}
-                {% image img.image fill-150x150 %}
+                {% image img.image fill-200x200 %}
                 {% endif %}
                 {% endfor %}
             </div>
-            <div class="col-md-8">
+            <div class="col-md-9">
                 <div class="card-body">
-                    <h5 class="card-title">{{ item.variant.ref }}</h5>
+                    <h5 class="text-left">{{ item.variant.ref }}</h5>
                     <p class="card-text"></p>
-                    <button href="" class="delcart" data-quantity="{{item.quantity}}"
+                    <div class="text-right">
+                    <!--<button href="" class="delcart" data-quantity="{{item.quantity}}"
                             data-variant="{{item.variant.id}}">Minus
-                    </button>
+                    </button>-->
+                        <label href="" data-quantity="{{item.quantity}}"
+                               data-variant="{{item.variant.id}}" class="delcart btn btn-simple sub"
+                               style="color:#2A2D34;font-size: 24pt" onmouseover="this.style.color='#FC814A'"
+                               onmouseleave="this.style.color='#2A2D34'">-</label>
                     <span class="card-text"><small class="text-muted">{{ item.quantity }}</small></span>
-                    <button href="" class="addcart" data-quantity="{{item.quantity}}"
+                    <!--<button href="" class="addcart" data-quantity="{{item.quantity}}"
                             data-variant="{{item.variant.id}}">add
+                    </button>-->
+                     <label href="" data-quantity="{{item.quantity}}"
+                               data-variant="{{item.variant.id}}" class="addcart btn btn-simple sub"
+                               style="color:#2A2D34;font-size: 18pt" onmouseover="this.style.color='#FC814A'"
+                               onmouseleave="this.style.color='#2A2D34'">+</label>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="card-text"><span class="text-muted">{{ item.variant.price }}</span></span>
+                    </div>
+                    <button class="btn btn-simple float-right rmvbutton" type="submit" id="rmvbutton" data-variant="{{item.variant.ref}}">
+                        <img src="{% static 'images/delete.svg' %}" width="20" height="20">
                     </button>
-                    <p class="card-text"><small class="text-muted">{{ item.variant.price }}</small></p>
-
                 </div>
             </div>
         </div>
     </div>
     {% endfor %}
-    {% if basket.count == 0 %}
-        <p>Your basket is empty</p>
-    {% else %}
-        <span>Sub-total({{basket.count}}):{{total_price}}</span>
-    {% endif %}
+
+    <br>
+
+    <div class="text-right">
+        {% if basket.count == 0 %}
+        <p class="text-left">Your basket is empty</p>
+        {% else %}
+        <span class="font-titillium">{{total_price}}</span>
+        {% endif %}
+        <br>
+        <button class="empty-cart-btn text-left" type="button" id="empty-cart" onclick="emptyCart();">Empty cart
+        </button>
+        {% if not user.is_authenticated %}
+        <a href="{% url 'account_signup' %}">
+            <button class="signup-checkout-btn">Sign-up</button>
+        </a>
+        {% else %}
+        <a href="{% url 'address-select' %}">
+            <button class="checkout-btn">Checkout</button>
+        </a>
+        {% endif %}
+    </div>
+
 </div>
+
+<br>
+<br>
+<br>
 
 
 <!--<div id="basket_items">
@@ -72,12 +108,7 @@
 <br>
 {% endfor %}-->
 
-{% if not user.is_authenticated %}
-<a href="{% url 'account_signup' %}">Sign-up</a>
-{% endif %}
 
-<a href="{% url 'longclaw_checkout_view' %}">Checkout</a>
-<a href="/">Products</a>
 
 
 {% longclaw_vendors_bundle %}
@@ -115,6 +146,8 @@
     $(".addcart").on('click', function (event) {
         event.preventDefault();
         var variant = event.currentTarget.dataset.variant;
+        var qty = event.currentTarget.dataset.quantity;
+        if(qty < 10){
         longclawclient.basketList.post({
             prefix: '{% longclaw_api_url_prefix %}',
             data: {
@@ -126,9 +159,32 @@
             }
         });
 
+    }});
+
+
+
+    $(".rmvbutton").on('click', function (event) {
+        const remove_button_val = event.currentTarget.dataset.variant;
+        $.ajax({
+            type: "POST",
+            url: '{{ 'delete-cart/ ' }}',
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}', ref: remove_button_val, empty:'N'},
+            success: function callback(response) {
+                location.reload();
+            }
+        });
     });
 
-
+    function emptyCart() {
+        $.ajax({
+            type: "POST",
+            url: '{{ 'delete-cart/ ' }}',
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}', empty: 'Y'},
+            success: function callback(response) {
+                location.reload();
+            }
+        });
+    }
 
 </script>
 

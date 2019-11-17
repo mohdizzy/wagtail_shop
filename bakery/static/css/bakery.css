@@ -1,0 +1,179 @@
+body{
+	font-family: 'Titillium Web', sans-serif;
+}
+
+.font-titillium{
+    font-family: 'Titillium Web', sans-serif;
+}
+
+.top-nav-color{
+    background-color: #3C0000;
+}
+
+.secondary-color{
+    color: #FC814A;
+}
+
+.cart-button-color{
+    color: #2A2D34;
+}
+
+.add-to-cart {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+	border-radius:8px;
+	border:2px solid #fc824a;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:4px 11px;
+	text-decoration:none;
+}
+.add-to-cart:hover {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+}
+.add-to-cart:active {
+	position:relative;
+	top:1px;
+}
+
+.add-to-cart:focus{
+	outline: none;
+}
+
+.empty-cart-btn {
+	background:linear-gradient(to bottom, #3C0000 5%, #3C0000 100%);
+	background-color:#3C0000;
+	border-radius:8px;
+	border:1px solid #3C0000;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:5px 10px;
+	text-decoration:none;
+}
+.empty-cart-btn:hover {
+	background:linear-gradient(to bottom, #3C0000 5%, #3C0000 100%);
+	background-color:#3C0000;
+}
+.empty-cart-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.empty-cart-btn:focus{
+	outline: none;
+}
+
+.asteriskField {
+    display: none;
+}
+
+
+.razorpay-payment-button {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+	border-radius:7px;
+	border:2px solid #fc824a;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:5px 12px;
+	text-decoration:none;
+}
+.razorpay-payment-button:hover {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+}
+.razorpay-payment-button:active {
+	position:relative;
+	top:1px;
+}
+
+.razorpay-payment-button:focus{
+	outline: none;
+}
+
+
+.back-btn {
+	background-color:#2a2d34;
+	border-radius:9px;
+	border:3px solid #2a2d34;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:16px 69px;
+	text-decoration:none;
+}
+.back-btn:hover {
+	background-color:#2a2d34;
+}
+.back-btn:active {
+	position:relative;
+	top:1px;
+}
+.back-btn:focus{
+	outline: none;
+}
+
+.checkout-btn {
+	background:linear-gradient(to bottom, #3C0000 5%, #3C0000 100%);
+	background-color:#3C0000;
+	border-radius:8px;
+	border:1px solid #3C0000;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:5px 10px;
+	text-decoration:none;
+}
+.checkout-btn:hover {
+	background:linear-gradient(to bottom, #3C0000 5%, #3C0000 100%);
+	background-color:#3C0000;
+}
+.checkout-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.checkout-btn:focus{
+	outline: none;
+}
+
+.signup-checkout-btn {
+	background:linear-gradient(to bottom, #3C0000 5%, #3C0000 100%);
+	background-color:#3C0000;
+	border-radius:8px;
+	border:1px solid #3C0000;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:5px 10px;
+	text-decoration:none;
+}
+.signup-checkout-btn:hover {
+	background:linear-gradient(to bottom, #3C0000 5%, #3C0000 100%);
+	background-color:#3C0000;
+}
+.signup-checkout-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.signup-checkout-btn:focus{
+	outline: none;
+}
+

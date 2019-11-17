@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load static wagtailcore_tags wagtailimages_tags %}
 
 {% load basket_tags %}
 
@@ -9,14 +9,17 @@
 {% block body_class %} template-productpage {%endblock%}
 
 {% block content %}
+
+<br>
+<br>
+
 <div class="product_content row no-gutters">
     <div class="image col-2">
         {% if page.images %}
         <div id="thumbs" style="float: left; margin: 10px">
         {% for item in page.images.all %}
             {% image item.image fill-100x100 %}
-            <p>{{ item.caption }}</p>
-
+            <br><br>
         {% endfor %}
         </div>
         {% else %}
@@ -29,56 +32,58 @@
         <img id="largeImage" width="300" height="300">
     </div>
 
-    <div class="product_content_info col-5">
-        <h1 class="product_title">{{ page.title }}</h1>
-        <div class="product_description">{{ page.description|richtext }}</div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>Price</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="product_content_info col-4">
+        <h1 class="font-titillium">{{ page.title }}</h1>
 
-            </tbody>
-        </table>
 
+        <!-- Product with 2 variants -->
         {% if page.variants.all.count > 1 %}
-        <select id="variant-select">
+        <select id="variant-select" class="custom-select w-auto">
             {% for variant in page.variants.all %}
             <option value="{{variant.id}}" stock="{{variant.stock}}" {% if variant.stock < 1 %}disabled{%else%}{%endif%}>{{variant.ref}} - {{variant.price}}</option>
             {% endfor %}
         </select>
         <div>
-            <button type="button" id="sub" class="sub">-</button>
-            <input type="number" id="multi_variant_qty_cart" value="1" min="1" max="10"/>
-            <button type="button" id="add" class="add">+</button>
+            <!--<button type="button" id="sub" class="sub">-</button>
+            <input readonly type="number" id="multi_variant_qty_cart" value="1" min="1" max="10"/>
+            <button type="button" id="add" class="add">+</button>-->
+            <label href="" id="sub" class="btn btn-simple sub" style="color:#2A2D34;font-size: 24pt"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">-</label>
+            &nbsp;<input readonly type="text" id="multi_variant_qty_cart" value="1" size="1" min="1" max="10"/>
+            <label href="" id="add" class="btn btn-simple add" style="color:#2A2D34;font-size: 20pt"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">+</label>
         </div>
-        <button id="add-to-basket-btn">Add To Basket</button>
+        <button type="button" id="add-to-basket-btn" class="add-to-cart">ADD TO CART</button>
 
         {% else %}
 
+            <!-- Product with single variant -->
             {% for variant in page.variants.all %}
             {% if variant.stock > 0 %}
-            <button id="add-to-basket-btn" value="{{variant.id}}" stock="{{variant.stock}}">Add To Basket</button>
-            {{variant.price}}
+            <span class="font-titillium text-muted">&#x20B9;{{variant.price}}</span>
             <p>{{variant.gluten_free}}</p>
             <div>
-                <button type="button" id="sub" class="sub">-</button>
-                <input type="number" id="qty_cart" value="1" min="1" max="{% if variant.stock > 10 %} 10{%else%}{{variant.stock}}{%endif%}"/>
-                <button type="button" id="add" class="add">+</button>
+                <label href="" id="sub" class="btn btn-simple sub" style="color:#2A2D34;font-size: 24pt" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">-</label>
+                &nbsp;<input readonly type="text" id="qty_cart" size="1" value="1" min="1" max="{% if variant.stock > 10 %} 10{%else%}{{variant.stock}}{%endif%}"/>
+                <label href="" id="add" class="btn btn-simple add" style="color:#2A2D34;font-size: 20pt" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">+</label>
             </div>
+            <br>
+            <button type="button" id="add-to-basket-btn" value="{{variant.id}}" stock="{{variant.stock}}" class="add-to-cart">ADD TO CART</button>
             {% else %}
             <span class="label label-danger">Sold out</span>
             {% endif %}
             {% endfor %}
         {% endif %}
 
-        <h1>{{page.variants.all.stock}}</h1>
-
+        <br><br>
+        <div class="w-70"><span class="font-titillium">{{ page.description|richtext }}</span></div>
     </div>
+    <div class="col-1"></div>
 </div>
 {% if page.tags.all.count %}
 <div class="tags">
@@ -91,7 +96,14 @@
 </div>
 {% endif %}
 
-<p><a href="{{ page.get_parent.url }}">Return</a></p>
+<br><br><br><br><br>
+
+
+<div class="font-titillium text-center"><a href="{{ page.get_parent.url }}"
+                                           style="color:#2A2D34;font-size: 19pt;text-decoration: none"
+                                           onmouseover="this.style.color='#3C0000'"
+                                           onmouseleave="this.style.color='#2A2D34'">&#x2190;BACK</a>
+</div>
 
 
 
@@ -137,7 +149,7 @@
             const multi_variant_stock = $('#variant-select').find(':selected').attr("stock");
             const stock = multi_variant_stock == null ? Number($('#add-to-basket-btn').attr("stock")) : Number(multi_variant_stock);
 
-            if(stock >= quantity){
+            if(stock >= quantity && quantity<11){
               longclawclient.basketList.post({
                 prefix: "{% longclaw_api_url_prefix %}",
                 data: { variant_id, quantity:quantity }
