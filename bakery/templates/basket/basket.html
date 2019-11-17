@@ -62,14 +62,21 @@
         <br>
         <button class="empty-cart-btn text-left" type="button" id="empty-cart" onclick="emptyCart();">Empty cart
         </button>
+
         {% if not user.is_authenticated %}
         <a href="{% url 'account_signup' %}">
             <button class="signup-checkout-btn">Sign-up</button>
         </a>
         {% else %}
-        <a href="{% url 'address-select' %}">
-            <button class="checkout-btn">Checkout</button>
-        </a>
+            {% if previous_address_info == 'N' %}
+            <a href="{% url 'longclaw_checkout_view' %}">
+                <button class="checkout-btn">Checkout</button>
+            </a>
+            {% else%}
+            <a href="{% url 'address-select' %}">
+                <button class="checkout-btn">Checkout</button>
+            </a>
+            {% endif %}
         {% endif %}
     </div>
 
