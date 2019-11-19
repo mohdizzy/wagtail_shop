@@ -34,7 +34,8 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light top-nav-color">
         <a class="navbar-brand" href="/"  style="color:#FFFFFF">Brand</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+                aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
@@ -54,22 +55,24 @@
             </ul>
     <span class="navbar-text">
       <div>
-
           <a href="{% url 'longclaw_basket' %}">
               <span style="color: #FC814A;font-size: 8pt" class="align-top text-right">{{basket.count}}</span>
-              <img src="{% static "images/shopping-cart.svg" %}" width="25" height="25"></a>
+              <img src="{% static 'images/shopping-cart.svg' %}" width="25" height="25"></a>
             {% if user.is_authenticated %}
                 &nbsp;&nbsp;<span class="secondary-color">Hello, {% user_display user %}</span>
-                <a href="{% url 'account_logout' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                <a href="{% url 'account_logout' %}" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#FFFFFF'">Log out</a>
-                <a href="{% url 'order' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
-                   onmouseleave="this.style.color='#FFFFFF'">Orders</a>
-                <a href="{% url 'account-details' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
-                   onmouseleave="this.style.color='#FFFFFF'">Account</a>
+                <a href="{% url 'account-details' %}" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'"><img src="{% static 'images/user-account.svg' %}"
+                                                                  width="25" height="25"> </a>
             {% else %}
-                <a href="{% url 'account_login' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                <a href="{% url 'account_login' %}" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#FFFFFF'">Log in</a>
-                <a href="{% url 'account_signup' %}" class="btn btn-simple" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                <a href="{% url 'account_signup' %}" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#FFFFFF'">Sign up</a>
             {% endif %}
         </div>

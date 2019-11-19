@@ -177,3 +177,83 @@ body{
 	outline: none;
 }
 
+.show-addresses-btn {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+	border-radius:8px;
+	border:2px solid #fc824a;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:4px 11px;
+	text-decoration:none;
+}
+.show-addresses-btn:hover {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+}
+.show-addresses-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.show-addresses-btn:focus{
+	outline: none;
+}
+
+
+.order-history-btn {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+	border-radius:8px;
+	border:2px solid #fc824a;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:4px 11px;
+	text-decoration:none;
+}
+.order-history-btn:hover {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+}
+.order-history-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.order-history-btn:focus{
+	outline: none;
+}
+
+.delete-address-btn {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+	border-radius:8px;
+	border:2px solid #fc824a;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:'Titillium Web', sans-serif;
+	font-size:14px;
+	padding:4px 11px;
+	text-decoration:none;
+}
+.delete-address-btn:hover {
+	background:linear-gradient(to bottom, #fc824a 5%, #fc824a 100%);
+	background-color:#fc824a;
+}
+.delete-address-btn:active {
+	position:relative;
+	top:1px;
+}
+
+.delete-address-btn:focus{
+	outline: none;
+}
+
+

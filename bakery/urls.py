@@ -26,8 +26,9 @@ urlpatterns = [
     url(r'^search/$', search_views.search, name='search'),
 
     path('basket/delete-cart/', mainView.deletecart, name='delete-cart'),
-    url(r'^address-select/$', mainView.AddressView.as_view(), name='address-select'),
+    url(r'^address-select/$', mainView.AddressSelectionView.as_view(), name='address-select'),
     url(r'^final-checkout/$', mainView.FinalCheckoutView.as_view(), name='final-checkout'),
+    url(r'^address-manage/$', mainView.AddressManageView.as_view(), name='address-manage'),
 
     url(r'', include(longclaw_urls)),
     url(r'', include(wagtail_urls))

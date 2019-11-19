@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load longclawcheckout_tags longclawcore_tags%}
+
+{% block content %}
+
+
+<br><br>
+<div class="container font-titillium">
+    <h1>Your Addresses</h1>
+
+    <form action="." method="post" class="" id="checkout-form">
+        <div class="row">
+            {% if user.is_authenticated %}
+                {% if stored_address %}
+                    {% for stored_address in stored_address %}
+                    <div class="col-4 my-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{stored_address.name}}</h5>
+                                <span class="card-text">{{stored_address.line_1}}</span>
+                                <br>
+                                <span class="card-text">{{stored_address.line_2}}</span>
+                                <br>
+                                <span class="card-text">{{stored_address.city}}</span>-<span class="card-text">{{stored_address.postcode}}</span>
+                                <br>
+                                <span class="card-text">{{stored_address.country}}</span>
+                                <br>
+                                <button class="delete-address float-right delete-address-btn" type="submit"
+                                        data-variant="{{stored_address.id}}">Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You do not have any stored addresses.</p>
+                {% endif %}
+            {%endif%}
+        </div>
+    </form>
+</div>
+
+
+
+
+{% endblock content %}
+
+
+
+{% block extra_js %}
+<script type="text/javascript">
+
+$(".delete-address").on('click', function (event) {
+        event.preventDefault();
+        const delete_address_id = event.currentTarget.dataset.variant;
+        console.log(address_id)
+        $.ajax({
+            type: "POST",
+            url: '',
+            data: {
+                'delete_address_id': delete_address_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}',
+            },
+            success: function (data) {
+                console.log(data);
+                location.reload()
+
+            }
+        });
+    });
+</script>
+
+{% endblock %}
+

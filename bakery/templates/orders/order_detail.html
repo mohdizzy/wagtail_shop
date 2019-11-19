@@ -4,11 +4,11 @@
 
 {% block content%}
 
-<br><br><br>
-<h1 class="font-titillium">Order History</h1>
-{% regroup orders_user by order_id as order_details %}
-{% for orders in order_details %}
+<br><br>
 <div class="container font-titillium">
+    <h1 class="font-titillium">Order History</h1>
+    {% regroup orders_user by order_id as order_details %}
+    {% for orders in order_details %}
     <br>
     <br>
     <div class="card w-75 text-center mx-auto">
@@ -51,8 +51,9 @@
         </div>
     </div>
     <br>
+
+    {% endfor %}
 </div>
-{% endfor %}
 
 <!--
 <div>

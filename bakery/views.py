@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from longclaw.basket.utils import destroy_basket, remove_from_basket
-from longclaw.shipping.models import Address
+from longclaw.shipping.models import UserAddress
 try:
     from django.urls import reverse
 except ImportError:
@@ -26,7 +26,7 @@ class OrderDetail(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["orders_user"] = self.orders_user
-        print(context['orders_user'].values())
+
         return context
 
 def deletecart(request):
@@ -38,16 +38,16 @@ def deletecart(request):
 
 
 class AccountDetails(generic.TemplateView):
-    template_name = 'account_details/account-details.html'
+    template_name = 'account_details/account_details.html'
 
 
-class AddressView(generic.TemplateView):
+class AddressSelectionView(generic.TemplateView):
     template_name = "address/address_selection.html"
 
     def get_context_data(self, **kwargs):
-        context = super(AddressView, self).get_context_data(**kwargs)
+        context = super(AddressSelectionView, self).get_context_data(**kwargs)
 
-        context['stored_address'] = Address.objects.filter(orders_shipping_address__email=str(self.request.user))
+        context['stored_address'] = UserAddress.objects.filter(email=str(self.request.user)).distinct()
 
         return context
 
@@ -55,13 +55,34 @@ class AddressView(generic.TemplateView):
 class FinalCheckoutView(generic.TemplateView):
     template_name = "checkout/final_checkout.html"
 
+    # Receive selected address and it's ID to session token
     def post(self, request, *args, **kwargs):
         stored_address_id = request.POST['form-address-select']
         request.session['stored_address_id'] = stored_address_id
 
-
         return HttpResponseRedirect(reverse(
                 'longclaw_checkout_view'))
+
+
+class AddressManageView(generic.TemplateView):
+    template_name = "address/address_management.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(AddressManageView, self).get_context_data(**kwargs)
+
+        context['stored_address'] = UserAddress.objects.filter(email=str(self.request.user)).distinct()
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+
+        UserAddress.objects.filter(id=request.POST['delete_address_id']).delete()
+        print("deleted")
+
+        return HttpResponseRedirect(reverse(
+            'address-manage'))
+
+
 
 
 
