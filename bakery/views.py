@@ -17,6 +17,8 @@ except ImportError:
     from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .utils import render_to_pdf
+
 
 class OrderDetail(LoginRequiredMixin,generic.ListView):
     model = OrderItem
@@ -127,6 +129,18 @@ class AddressManageView(LoginRequiredMixin,generic.TemplateView):
 
         return HttpResponseRedirect(reverse(
             'address-manage'))
+
+
+class GeneratePdf(generic.View):
+
+    def get(self, request, *args, **kwargs):
+        order_info = OrderItem.objects.filter(pk=self.kwargs['pk']).select_related('order')
+        print(order_info)
+        inv_data = {
+             'invoice': order_info
+        }
+        pdf = render_to_pdf('invoice/invoice.html', inv_data)
+        return HttpResponse(pdf, content_type='application/pdf')
 
 
 
