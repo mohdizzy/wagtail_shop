@@ -175,7 +175,7 @@
         const remove_button_val = event.currentTarget.dataset.variant;
         $.ajax({
             type: "POST",
-            url: '{{ 'delete-cart/ ' }}',
+            url: '{% url 'delete-cart' %}',
             data: {csrfmiddlewaretoken: '{{ csrf_token }}', ref: remove_button_val, empty:'N'},
             success: function callback(response) {
                 location.reload();
@@ -186,7 +186,7 @@
     function emptyCart() {
         $.ajax({
             type: "POST",
-            url: '{{ 'delete-cart/ ' }}',
+            url: '{% url 'delete-cart' %}',
             data: {csrfmiddlewaretoken: '{{ csrf_token }}', empty: 'Y'},
             success: function callback(response) {
                 location.reload();

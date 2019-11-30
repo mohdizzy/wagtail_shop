@@ -1,5 +1,5 @@
 {% load static wagtailuserbar account%}
-{% load basket_tags %}
+{% load longclawcore_tags %}
 
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -56,10 +56,10 @@
     <span class="navbar-text">
       <div>
           <a href="{% url 'longclaw_basket' %}">
-              <span style="color: #FC814A;font-size: 8pt" class="align-top text-right">{{basket.count}}</span>
+              <span style="color: #FC814A;font-size: 8pt" class="align-top text-right basketCount"></span>
               <img src="{% static 'images/shopping-cart.svg' %}" width="25" height="25"></a>
             {% if user.is_authenticated %}
-                &nbsp;&nbsp;<span class="secondary-color">Hello, {% user_display user %}</span>
+                &nbsp;&nbsp;<span class="secondary-color">Hello, {{user.first_name}}</span>
                 <a href="{% url 'account_logout' %}" class="btn btn-simple" style="color:#FFFFFF"
                    onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#FFFFFF'">Log out</a>
@@ -134,7 +134,38 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script type="text/javascript"></script>
+        {% longclaw_vendors_bundle %}
+        {% longclaw_client_bundle %}
+
+        <script type="text/javascript">
+
+//            $(document).ready(function () {
+//                var api_url = 'api/basket/count/'
+//
+//                    $.ajax({
+//                        url: api_url,
+//                        contentType: "application/json",
+//                        dataType: 'json',
+//                        success: function (result) {
+//                            console.log(result);
+//                            $(".basketCount").text(result.length(id));
+//                        }
+//                    })
+//
+//            });
+
+//            $(document).ready(function () {
+//                longclawclient.basketList.get({
+//                    prefix: '{% longclaw_api_url_prefix %}',
+//                    data: '',
+//                }).then(function (response) {
+//                    if (response.length != 0) {
+//                        $(".basketCount").text(response.length);
+//                    }
+//
+//                });
+//            });
+        </script>
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
         {% endblock %}

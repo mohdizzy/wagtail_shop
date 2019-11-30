@@ -11,9 +11,7 @@
 <div class="container my-5 font-titillium">
     <div class="row">
 
-        <div class="col-3"></div>
-
-        <div class="col-3">
+        <div class="col-3 ml-auto">
             <div class="card">
                 <div class="card-body">
                     <img src="{% static 'images/orders.svg' %}" width="40" height="40">
@@ -29,7 +27,7 @@
             <div class="card">
                 <div class="card-body">
                     <img src="{% static 'images/address.svg' %}" width="40" height="40">
-                    <p class="card-text">Manage addresses.</p>
+                    <p class="card-text">Edit addresses.</p>
                     <a href="{% url 'address-manage' %}">
                         <button class="checkout-btn">View addresses</button>
                     </a>
@@ -37,7 +35,17 @@
             </div>
         </div>
 
-        <div class="col-3"></div>
+        <div class="col-3 mr-auto">
+            <div class="card">
+                <div class="card-body">
+                    <img src="{% static 'images/address.svg' %}" width="40" height="40">
+                    <p class="card-text">Login & Security.</p>
+                    <a href="{% url 'login-security' %}">
+                        <button class="checkout-btn">Manage</button>
+                    </a>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>

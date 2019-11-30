@@ -49,15 +49,6 @@ The only required field in `checkout_form` is `email`.
                 {% endfor %}
 
 
-                <div class="card" style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">{{stored_address.name}}</h5>
-                        <p class="card-text">{{stored_address.city}}</p>
-                        <p class="card-text">{{stored_address.country}}</p>
-                    </div>
-                </div>
-
-
                 {% for field in checkout_form %}
                 <!-- purposefully ignoring different billing address option to simplify -->
                 {% if field.name == 'different_billing_address' %}
@@ -92,7 +83,7 @@ The only required field in `checkout_form` is `email`.
                         data-description="Purchase Description"
                         data-image=""
                         data-prefill.name="Longclaw"
-                        data-prefill.email="{{user}}"
+                        data-prefill.email="{{user.email}}"
                         data-theme.color="#F37254"
 
                 ></script>

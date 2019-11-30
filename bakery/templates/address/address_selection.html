@@ -22,7 +22,7 @@ The only required field in `checkout_form` is `email`.
 <br><br><br><br>
 <div class="container font-titillium">
 
-            <form action="{%url 'final-checkout' %}" method="post" class="" id="checkout-form">
+            <form action="{%url 'selected-address' %}" method="post" class="" id="checkout-form">
                 {% csrf_token %}
                 {% if user.is_authenticated %}
                 {% for stored_address in stored_address %}

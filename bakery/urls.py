@@ -10,13 +10,23 @@ from wagtail.documents import urls as wagtaildocs_urls
 from longclaw import urls as longclaw_urls
 from home import views
 from . import views as mainView
-from django.urls import path
+
 
 urlpatterns = [
     url(r'^$', views.IndexPage.as_view(), name="index"),
     url(r'^home/', views.HomePage.as_view(), name="home"),
-    url(r'^orders/', mainView.OrderDetail.as_view(), name="order"),
-    url(r'^account-details/', mainView.AccountDetails.as_view(), name="account-details"),
+    url(r'^delete-cart/', mainView.deletecart, name='delete-cart'),
+    url(r'^address-select/', mainView.AddressSelectionView.as_view(), name='address-select'),
+    url(r'^selected-address/', mainView.SelectedAddress, name='selected-address'),
+    url(r'^account-details/$', mainView.AccountDetailsView.as_view(), name="account-details"),
+    url(r'^account-details/login_security/$', mainView.LoginSecurityView.as_view(), name="login-security"),
+    url(r'^account-details/login_security/change_name/(?P<pk>\d+)/edit/', mainView.ChangeNameView.as_view(),
+        name="change-name"),
+    url(r'^account-details/orders/', mainView.OrderDetail.as_view(), name="order"),
+    url(r'^account-details/address-manage/$', mainView.AddressManageView.as_view(), name='address-manage'),
+    url(r'^account-details/login_security/change_number/(?P<pk>\d+)/edit/', mainView.ChangePhoneView.as_view(),
+        name="change-number"),
+    # url(r'^account-details/login_security/edit_name', mainView.ChangeNameView.as_view(), name="change-name"),
 
     url(r'^django-admin/', admin.site.urls),
 
@@ -24,11 +34,9 @@ urlpatterns = [
     url(r'^documents/', include(wagtaildocs_urls)),
 
     url(r'^search/$', search_views.search, name='search'),
+    url(r'accounts/', include('allauth.urls')),
 
-    path('basket/delete-cart/', mainView.deletecart, name='delete-cart'),
-    url(r'^address-select/$', mainView.AddressSelectionView.as_view(), name='address-select'),
-    url(r'^final-checkout/$', mainView.FinalCheckoutView.as_view(), name='final-checkout'),
-    url(r'^address-manage/$', mainView.AddressManageView.as_view(), name='address-manage'),
+
 
     url(r'', include(longclaw_urls)),
     url(r'', include(wagtail_urls))

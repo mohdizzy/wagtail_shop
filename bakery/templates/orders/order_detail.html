@@ -15,7 +15,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-3 text-left text-muted">Order placed<br>{{orders.list.0.order.payment_date}}</div>
-                <div class="col-md-3 text-left text-muted">Total<br>{{orders.list.0.total}}</div>
+                <div class="col-md-3 text-left text-muted">Total<br>{{order_total}}</div>
                 <div class="col-md-3 text-right text-muted">Order#<br>{{orders.list.0.order_id}}</div>
                 <div class="col-md-3 text-muted">
                     {% for tup in orders.list.0.order.ORDER_STATUSES %}

@@ -5,15 +5,16 @@
 {% block body_class %}template-productindex{% endblock %}
 
 {% block content %}
+<div class="container font-titillium my-5">
+    <h1>{{ page.title }}</h1>
+    <br>
 
-<h1>{{ page.title }}</h1>
-<div class="container-fluid">
     <div class="row">
 
 
         {% for post in page.get_children %}
         {% with post=post.specific %}
-        <div class="col-lg-3">
+        <div class="col-4 mr-auto">
             <div class="card" style="width: 18rem;">
                 {% image post.images.first.image fill-300x300 class="card-img-top" alt="" %}
                 <div class="card-body">
@@ -21,7 +22,7 @@
                         <h4>{{ post.title }}</h4>
                     </a>
                     <!--<p>{{ post.description|richtext }}</p>-->
-                    <p>From &euro;{{  post.price_range.0 }}</p>
+                    <p>From &#8377;{{ post.price_range.0 }}</p>
                 </div>
             </div>
             <br>

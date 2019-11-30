@@ -49,19 +49,20 @@ INSTALLED_APPS = [
     'longclaw.checkout',
     'longclaw.basket',
     'longclaw.stats',
-    'longclaw.accounts',
 
     'debug_toolbar',
 
     'home',
     'search',
     'catalog',
+    'bakery',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
     'crispy_forms',
+    'django_ses',
 
 ]
 
@@ -181,8 +182,6 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 INTERNAL_IPS = ['127.0.0.1']
 
-
-AUTH_USER_MODEL = 'accounts.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTHENTICATION_BACKENDS = (
@@ -195,6 +194,13 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 1
 
+#EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_ACCESS_KEY_ID = 'AKIARWK5HJ3HRYNLQUMM'
+AWS_SECRET_ACCESS_KEY = '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'
+DEFAULT_FROM_EMAIL = 'contact@mohdizzy.com'
+AWS_SES_REGION_NAME = 'eu-west-1'
+AWS_SES_REGION_ENDPOINT = 'email.eu-west-1.amazonaws.com'
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
@@ -202,6 +208,8 @@ ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_FORMS = {'signup': 'bakery.forms.CustomSignupForm'}
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
