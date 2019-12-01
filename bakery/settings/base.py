@@ -63,6 +63,7 @@ INSTALLED_APPS = [
 
     'crispy_forms',
     'django_ses',
+    'mathfilters',
 
 ]
 

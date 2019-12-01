@@ -34,16 +34,25 @@ class ProductVariant(ProductVariantBase):
     # You *could* do away with the 'Product' concept entirely - e.g. if you only
     # want to support 1 'variant' per 'product'.
     product = ParentalKey(Product, related_name='variants')
+    tax = models.PositiveIntegerField(default=0)
 
     slug = AutoSlugField(
         separator='',
-        populate_from=('product', 'ref'),
+        populate_from=('product', 'ref','tax'),
         )
 
     # Enter your custom product variant fields here
     # e.g. colour, size, stock and so on.
     # Remember, ProductVariantBase provides 'price', 'ref' and 'stock' fields
     description = RichTextField()
+
+    @property
+    def get_tax(self):
+        return self.tax+100
+
+    @property
+    def get_tax_value(self):
+        return self.tax/100
 
 
 class ProductImage(Orderable):

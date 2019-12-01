@@ -134,7 +134,7 @@ class AddressManageView(LoginRequiredMixin,generic.TemplateView):
 class GeneratePdf(generic.View):
 
     def get(self, request, *args, **kwargs):
-        order_info = OrderItem.objects.filter(pk=self.kwargs['pk']).select_related('order')
+        order_info = OrderItem.objects.filter(order__order_id=self.kwargs['pk']).select_related('order')
         print(order_info)
         inv_data = {
              'invoice': order_info
