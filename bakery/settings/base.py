@@ -113,6 +113,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'longclaw.configuration.context_processors.currency',
+                'wagtail.contrib.settings.context_processors.settings',
             ],
         },
     },

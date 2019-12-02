@@ -1,4 +1,5 @@
 from django.views import generic
+from longclaw.configuration.models import Configuration
 from longclaw.orders.models import OrderItem
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -18,6 +19,7 @@ except ImportError:
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import render_to_pdf
+
 
 
 class OrderDetail(LoginRequiredMixin,generic.ListView):
@@ -134,10 +136,12 @@ class AddressManageView(LoginRequiredMixin,generic.TemplateView):
 class GeneratePdf(generic.View):
 
     def get(self, request, *args, **kwargs):
-        order_info = OrderItem.objects.filter(order__order_id=self.kwargs['pk']).select_related('order')
+        order_info = OrderItem.objects.filter(order__order_id=str(self.kwargs['pk'])).select_related('order')
         print(order_info)
+        invoice_prefix = Configuration.for_site(request.site).invoice_prefix
         inv_data = {
-             'invoice': order_info
+             'invoice': order_info,
+            'invoice_prefix':invoice_prefix,
         }
         pdf = render_to_pdf('invoice/invoice.html', inv_data)
         return HttpResponse(pdf, content_type='application/pdf')

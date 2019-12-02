@@ -52,6 +52,7 @@ The only required field in `checkout_form` is `email`.
                 {% for field in checkout_form %}
                 <!-- purposefully ignoring different billing address option to simplify -->
                 {% if field.name == 'different_billing_address' %}
+                {{field|as_crispy_field}}
                 {% else %}
                 {% if field.errors %}
                 <div class="field error"></div>
@@ -68,6 +69,29 @@ The only required field in `checkout_form` is `email`.
                 </div>
                 {% endif %}
                 {% endfor %}
+
+                <div id="billingForm">
+                {% for field in shipping_form %}
+                {% if field.is_hidden %}
+                {{ field }}
+                {% else %}
+                {% if field.errors %}
+                <div class="field error"></div>
+                {% else %}
+                <div class="field">
+                    {% endif %}
+                    <!--<label>{{ field.label_tag }}</label>-->
+                    {{ field|as_crispy_field }}
+                    {% if field.help_text %}
+                    <p class="help">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                    <div class="ui error message">
+                        <p>{{ field.errors }}</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                </div>
 
 
                 {% for key,value in razorpay.items %}
@@ -99,7 +123,18 @@ The only required field in `checkout_form` is `email`.
 {% endblock content %}
 
 {% block extra_js %}
+<script type="text/javascript">
 
+    $(function () {
+        $("#id_different_billing_address").click(function () {
+            if ($(this).is(":checked")) {
+                $("#billingForm").empty();
+            } else {
+                location.reload();
+            }
+        });
+    });
+</script>
 
 {% endblock %}
 {#

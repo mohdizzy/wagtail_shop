@@ -130,7 +130,7 @@ table.noborder tfoot td {
               <td></td>
               <td></td>
                <td></td>
-               <td style="text-align: right;vertical-align: top;width: 100%">Invoice ID:{{invoice.0.order.invoice_number}}</td>
+               <td style="text-align: right;vertical-align: top;width: 100%">Invoice ID:{{invoice_prefix}}/{{invoice.0.order.invoice_number}}</td>
             </tr>
             <tr>
                <td style="text-align: left;vertical-align: top;width: 100%">Order Date:{{invoice.0.order.created_date|date:"d-m-y"}}</td>
