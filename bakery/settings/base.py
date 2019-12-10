@@ -184,7 +184,7 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 INTERNAL_IPS = ['127.0.0.1']
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
@@ -196,9 +196,11 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 1
 
-#EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_ACCESS_KEY_ID = 'AKIARWK5HJ3HRYNLQUMM'
-AWS_SECRET_ACCESS_KEY = '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'
+
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SES_ACCESS_KEY_ID = 'AKIARWK5HJ3HRYNLQUMM'
+AWS_SES_SECRET_ACCESS_KEY = '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'
 DEFAULT_FROM_EMAIL = 'contact@mohdizzy.com'
 AWS_SES_REGION_NAME = 'eu-west-1'
 AWS_SES_REGION_ENDPOINT = 'email.eu-west-1.amazonaws.com'

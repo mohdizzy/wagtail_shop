@@ -99,14 +99,13 @@ The only required field in `checkout_form` is `email`.
                 <script class="razorpay_payment_button"
                         src="https://checkout.razorpay.com/v1/checkout.js"
                         data-key="rzp_test_zr7aWLZBEglyr3"
-                        data-amount="59900"
                         data-order_id={{ value }}
                         data-currency="INR"
                         data-buttontext="Pay with Razorpay"
-                        data-name="Merchant Name"
+                        data-name="Miztique"
                         data-description="Purchase Description"
                         data-image=""
-                        data-prefill.name="Longclaw"
+                        data-prefill.name="{{user}}"
                         data-prefill.email="{{user.email}}"
                         data-theme.color="#F37254"
 

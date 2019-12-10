@@ -22,6 +22,7 @@ from .utils import render_to_pdf
 
 
 
+
 class OrderDetail(LoginRequiredMixin,generic.ListView):
     model = OrderItem
     template_name = "orders/order_detail.html"
@@ -37,10 +38,7 @@ class OrderDetail(LoginRequiredMixin,generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["orders_user"] = self.orders_user
-        total = 0
-        for i in range(int(context["orders_user"].count())):
-            total += context["orders_user"][i].total
-        context["order_total"] = total
+
         return context
 
 def deletecart(request):
@@ -144,7 +142,10 @@ class GeneratePdf(generic.View):
             'invoice_prefix':invoice_prefix,
         }
         pdf = render_to_pdf('invoice/invoice.html', inv_data)
+
         return HttpResponse(pdf, content_type='application/pdf')
+
+
 
 
 
