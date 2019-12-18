@@ -2,8 +2,6 @@
 
 {% load static wagtailcore_tags wagtailimages_tags account %}
 
-{% load basket_tags %}
-{% load longclawcheckout_tags longclawcore_tags %}
 
 {% block content %}
 
@@ -51,25 +49,9 @@
 </div>
 
 
-
-{% longclaw_vendors_bundle %}
-{% longclaw_client_bundle %}
-
 {% endblock %}
 
 {% block extra_js %}
-<script type=text/javascript>
 
-    $(".addcart").on('click', function (event) {
-        event.preventDefault();
-        longclawclient.addressDetail.get({
-            prefix: '{% longclaw_api_url_prefix %}',
-
-        }).then(function (response){
-            console.log(response)
-        });
-
-    });
-</script>
 
 {% endblock %}

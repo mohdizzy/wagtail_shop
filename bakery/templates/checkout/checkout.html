@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load longclawcheckout_tags longclawcore_tags crispy_forms_tags%}
+{% load static wagtailcore_tags wagtailimages_tags account %}
+{% load basket_tags %}
+
 
 {% block content %}
 <!--{#
@@ -21,7 +24,10 @@ The only required field in `checkout_form` is `email`.
 #}-->
 <br><br><br><br>
 <div class="container font-titillium">
-
+    <h2>Checkout</h2>
+    <br>
+    <div class="row">
+        <div class="col-md-10 col-lg-7 col-xl-7 col-sm-12 col-xs-12">
             <form action="." method="post" id="checkout-form">
                 {% csrf_token %}
                 {% if user.is_authenticated %}
@@ -71,7 +77,7 @@ The only required field in `checkout_form` is `email`.
                 {% endfor %}
 
                 <div id="billingForm">
-                {% for field in shipping_form %}
+                {% for field in billing_form %}
                 {% if field.is_hidden %}
                 {{ field }}
                 {% else %}
@@ -92,6 +98,50 @@ The only required field in `checkout_form` is `email`.
                 {% endif %}
                 {% endfor %}
                 </div>
+                </div>
+
+                <!-- Basket items -->
+                <div class="col-md-10 col-lg-5 col-xl-5 col-sm-12 col-xs-12">
+                    <h4 class="text-center">Order Summary</h4>
+                    <hr>
+                    {% for item in basket %}
+                    <div class="font-titillium">
+                        <div class="row no-gutters">
+                            <div class="col-3 d-block mx-auto">
+                                {% for img in item.variant.product.first_image %}
+                                {% if img.caption == item.variant.ref %}
+                                {% image img.image fill-100x100 %}
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <div class="col-2">
+                                <div class="card-body">
+                                    <h5 class="text-left">{{ item.variant.product }}</h5>
+                                    <p class="card-text"></p>
+                                    <div class="text-right">
+                                        <span class="card-text"><span class="text-muted">Qty:{{ item.quantity }}</span></span>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span class="card-text"><span class="text-muted">&#8377;{{ item.variant.price }}</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <hr>
+                    </div>
+
+                    {% endfor %}
+
+                    <!-- Total -->
+                    <div class="text-right">
+                        <span class="font-titillium" style="font-size: 3ch">Total:{{total_price}}</span>
+                        <br><br><br>
+                    </div>
+                </div>
+        </div>
+
+
 
 
                 {% for key,value in razorpay.items %}
@@ -115,8 +165,9 @@ The only required field in `checkout_form` is `email`.
                 <input type="hidden" value="Hidden Element" name="hidden">
 
             </form>
-
 </div>
+</div>
+<br>
 
 
 {% endblock content %}
@@ -135,6 +186,9 @@ The only required field in `checkout_form` is `email`.
     });
 </script>
 
+
+{% longclaw_vendors_bundle %}
+{% longclaw_client_bundle %}
 {% endblock %}
 {#
 Load any client javascript provided by the payment gateway.

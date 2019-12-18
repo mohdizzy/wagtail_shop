@@ -5,16 +5,28 @@
 {% block body_class %}template-productindex{% endblock %}
 
 {% block content %}
+
 <div class="container font-titillium my-5">
     <h1>{{ page.title }}</h1>
     <br>
-
+    <div class="text-right">
+    <form action="" method="get">
+            <span>Sort by:</span>
+            <select name="sort_by">
+                <option value="live">Featured</option>
+                <option value="variants__base_price" {%ifequal request.GET.sort_by "variants__base_price"%}selected{%endifequal%}>Price: Low to high</option>
+                <option value="-variants__base_price" {%ifequal request.GET.sort_by "-variants__base_price"%}selected{%endifequal%}>Price: High to Low</option>
+                <option value="-last_published_at" {%ifequal request.GET.sort_by "-last_published_at"%}selected{%endifequal%}> Newest</option>
+            </select>
+            <button type="submit">Go</button>
+    </form>
+        </div>
     <div class="row">
 
 
-        {% for post in page.get_children %}
+        {% for post in prod %}
         {% with post=post.specific %}
-        <div class="col-4 mr-auto">
+        <div class="col-md-6 col-lg-4 col-xl-4 col-sm-8 col-xs-10 mr-auto">
             <div class="card" style="width: 18rem;">
                 {% image post.images.first.image fill-300x300 class="card-img-top" alt="" %}
                 <div class="card-body">
@@ -22,7 +34,7 @@
                         <h4>{{ post.title }}</h4>
                     </a>
                     <!--<p>{{ post.description|richtext }}</p>-->
-                    <p>From &#8377;{{ post.price_range.0 }}</p>
+                    <p>&#8377;{{ post.price_range.0 }}</p>
                 </div>
             </div>
             <br>
@@ -36,21 +48,8 @@
 <br>
 <br>
 
+{% endblock %}
 
-<!--<div class="card-grid">
-{% for post in page.get_children %}
-   {% with post=post.specific %}
-    <div class="card">
-        {% image post.images.first.image max-400x320 %}
-        <div class="card-body">
-            <a href="{% pageurl post %}">
-                <h4>{{ post.title }}</h4>
-            </a>
-            <p>{{ post.description|richtext }}</p>
-            <p>From &euro;{{  post.price_range.0 }}</p>
-        </div>
-   </div>
-   {% endwith %}
-{% endfor %}
-</div>-->
+{% block extra_js %}
+            {# Override this in templates to add extra javascript #}
 {% endblock %}

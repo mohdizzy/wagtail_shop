@@ -23,6 +23,7 @@ from .utils import render_to_pdf
 
 
 
+
 class OrderDetail(LoginRequiredMixin,generic.ListView):
     model = OrderItem
     template_name = "orders/order_detail.html"
@@ -38,7 +39,6 @@ class OrderDetail(LoginRequiredMixin,generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["orders_user"] = self.orders_user
-
         return context
 
 def deletecart(request):
@@ -55,16 +55,6 @@ class AccountDetailsView(LoginRequiredMixin,generic.TemplateView):
 class LoginSecurityView(LoginRequiredMixin,generic.TemplateView):
     template_name = 'account_details/login_security.html'
 
-# class ChangeNameView(generic.TemplateView):
-#     template_name = 'account_details/change_name.html'
-#     User = get_user_model()
-#
-#     def post(self, request, *args, **kwargs):
-#         firstName = User.objects.get(username=request.user.username)
-#         print(firstName)
-#         firstName.first_name = request.POST['new_first_name']
-#         firstName.save()
-#         return JsonResponse({'success': True})
 
 class ChangeNameView(LoginRequiredMixin,generic.UpdateView):
     model = User

@@ -12,6 +12,20 @@ class ProductIndex(Page):
     """
     subpage_types = ('catalog.Product', 'catalog.ProductIndex')
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request)
+
+        if "sort_by" in request.GET:
+            sort_by = request.GET.get('sort_by')
+
+            if sort_by[0] == "-":
+                context['prod'] = Product.objects.child_of(self).live().annotate(order_products=models.Max(sort_by[1:])).order_by('{}order_products'.format(sort_by[0:1]))
+            else:
+                context['prod'] = Product.objects.child_of(self).live().annotate(order_products=models.Max(sort_by)).order_by('order_products')
+        else:
+            context['prod'] = Product.objects.child_of(self).live()
+        return context
+
 
 class Product(ProductBase):
     parent_page_types = ['catalog.ProductIndex']

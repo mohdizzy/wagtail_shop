@@ -39,12 +39,14 @@
 
         <!-- Product with 2 variants -->
         {% if page.variants.all.count > 1 %}
+        <span class="font-titillium text-muted">Starting from &#x20B9;{{page.variants.all.0.product.price_range.1}}</span>
+        <br>
         <select id="variant-select" class="custom-select w-auto">
             {% for variant in page.variants.all %}
-            <option value="{{variant.id}}" stock="{{variant.stock}}" {% if variant.stock < 1 %}disabled{%else%}{%endif%}>{{variant.ref}} - {{variant.price}}</option>
+            <option value="{{variant.id}}" stock="{{variant.stock}}" {% if variant.stock < 1 %}disabled{%else%}{%endif%}>{{variant.ref}} - &#x20B9;{{variant.price}}</option>
             {% endfor %}
         </select>
-        <div>
+        &nbsp;&nbsp;&nbsp;&nbsp;
             <!--<button type="button" id="sub" class="sub">-</button>
             <input readonly type="number" id="multi_variant_qty_cart" value="1" min="1" max="10"/>
             <button type="button" id="add" class="add">+</button>-->
@@ -55,7 +57,7 @@
             <label href="" id="add" class="btn btn-simple add" style="color:#2A2D34;font-size: 20pt"
                    onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#2A2D34'">+</label>
-        </div>
+        <br>
         <button type="button" id="add-to-basket-btn" class="add-to-cart">ADD TO CART</button>
 
         {% else %}
@@ -64,7 +66,6 @@
             {% for variant in page.variants.all %}
             {% if variant.stock > 0 %}
             <span class="font-titillium text-muted">&#x20B9;{{variant.price}}</span>
-            <p>{{variant.gluten_free}}</p>
             <div>
                 <label href="" id="sub" class="btn btn-simple sub" style="color:#2A2D34;font-size: 24pt" onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#2A2D34'">-</label>
@@ -82,6 +83,20 @@
 
         <br><br>
         <div class="w-70"><span class="font-titillium">{{ page.description|richtext }}</span></div>
+        <div class="mx-auto">
+            <span>Share</span>
+            &nbsp;
+            <a href="http://www.instagram.com/miztique.io/" target="_blank"><img
+                    src="{% static 'images/icons8-instagram.svg' %}"
+                    width="30"
+                    height="30"></a>
+            &nbsp;
+            <a href="http://twitter.com/mohd_izzy" target="_blank"><img
+                    src="{% static 'images/icons8-twitter-filled.svg' %}"
+                    width="30" height="30"></a>
+            &nbsp;
+
+        </div>
     </div>
     <div class="col-1"></div>
 </div>
@@ -102,7 +117,7 @@
 <div class="font-titillium text-center"><a href="{{ page.get_parent.url }}"
                                            style="color:#2A2D34;font-size: 19pt;text-decoration: none"
                                            onmouseover="this.style.color='#3C0000'"
-                                           onmouseleave="this.style.color='#2A2D34'">&#x2190;BACK</a>
+                                           onmouseleave="this.style.color='#2A2D34'">&#x2190;BACK TO PRODUCTS</a>
 </div>
 
 

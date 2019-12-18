@@ -51,9 +51,15 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light top-nav-color">
         <a class="navbar-brand" href="/"  style="color:#FFFFFF">Brand</a>
+        <div class="mx-auto d-xl-none d-lg-none d-md-none d-sm-block d-block order-0">
+            <a href="{% url 'longclaw_basket' %}">
+              <span style="color: #FC814A;font-size: 8pt" class="align-top text-center basketCount"></span>
+              <img src="{% static 'images/shopping-cart.svg' %}" width="20" height="20"></a>
+        </div>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class=""><img src="{% static 'images/menu.svg' %}" width="25" height="25"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
@@ -65,12 +71,27 @@
                     <a class="nav-link" href="/products" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#FFFFFF'">Products</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
-                   onmouseleave="this.style.color='#FFFFFF'">Pricing</a>
+                {% if user.is_authenticated %}
+                <li class="nav-item d-xl-none d-lg-none d-md-none d-sm-block d-block">
+                <a class="nav-link" href="{% url 'account-details' %}" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Account</a>
                 </li>
+                <li class="nav-item d-xl-none d-lg-none d-md-none d-sm-block d-block">
+                    <a href="{% url 'account_logout' %}" class="nav-link" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Log out</a>
+                </li>
+                {% else %}
+                <li class="nav-item d-xl-none d-lg-none d-md-none d-sm-block d-block">
+                    <a href="{% url 'account_login' %}" class="nav-link" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Log in/Sign up</a>
+                </li>
+                {% endif %}
             </ul>
-    <span class="navbar-text">
+
+
+    <span class="navbar-text d-xl-block d-lg-block d-md-block d-sm-none d-none">
       <div>
           <a href="{% url 'longclaw_basket' %}">
               <span style="color: #FC814A;font-size: 8pt" class="align-top text-right basketCount"></span>
@@ -94,33 +115,60 @@
             {% endif %}
         </div>
     </span>
+
+
         </div>
     </nav>
 
 
     <div class="main">
         {% block content %}{% endblock %}
+    </div>
 
         <!-- Footer -->
-        <div class="card text-center">
+        <footer class="footer">
+
+        <div class="card text-center" style="border: 0ch;">
             <div class="card-body top-nav-color">
                 <div class="row font-titillium" style="color: #FFFFFF">
+
                     <div class="col-md-2">
-                        Link 1
-                        <br>Link 2
-                        <br>Link 3
+                        <a href="" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Contact</a>
+                        <br><span class="text-left">XXXX</span>
+                        <br><span>YYYY</span>
+                        <br><span>ZZZZ</span>
                     </div>
                     <div class="col-md-2">
-                        Link 1
-                        <br>Link 2
-                        <br>Link 3
+                        <a href="" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Terms & Conditions</a>
+                        <br>
+                        <a href="" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Privacy Policy</a>
+                        <br>
+                        <a href="" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Returns</a>
                     </div>
                     <div class="col-md-2">
-                        Link 1
-                        <br>Link 2
-                        <br>Link 3
+                        <a href="" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">About</a>
+                        <br>
+                        <a href="" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">News</a>
+                        <br>
+                        <a href="" class="btn btn-simple" style="color:#FFFFFF"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Blog</a>
                     </div>
+
                     <div class="col-md-1"></div>
+
                     <div class="col-md-5">
                         <div class="container">
                             <div class="thumbnail center well well-small text-center">
@@ -143,6 +191,8 @@
                 <span style="color: #FFFFFF">&#x24B8; 2019, BRAND.</span>
             </div>
         </div>
+
+            </footer>
 
         {# Global javascript #}
         <script type="text/javascript" src="{% static 'js/bakery.js' %}"></script>

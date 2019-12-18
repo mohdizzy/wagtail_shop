@@ -1,9 +1,32 @@
 body{
 	font-family: 'Titillium Web', sans-serif;
+	margin-bottom: 60px;
 }
 
 .font-titillium{
     font-family: 'Titillium Web', sans-serif;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 0px;
+}
+
+.masthead {
+  height: 50vh;
+  min-height: 500px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+	opacity: 0.8;
 }
 
 .top-nav-color{
