@@ -26,10 +26,11 @@ The only required field in `checkout_form` is `email`.
 <div class="container font-titillium">
     <h2>Checkout</h2>
     <br>
-    <div class="row">
-        <div class="col-md-10 col-lg-7 col-xl-7 col-sm-12 col-xs-12">
-            <form action="." method="post" id="checkout-form">
-                {% csrf_token %}
+
+    <form action="." method="post" id="checkout-form">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-10 col-lg-7 col-xs-12">
                 {% if user.is_authenticated %}
                 {{shipping_form.name.value|stringformat:'mohd'}}
                 {%endif%}
@@ -77,98 +78,120 @@ The only required field in `checkout_form` is `email`.
                 {% endfor %}
 
                 <div id="billingForm">
-                {% for field in billing_form %}
-                {% if field.is_hidden %}
-                {{ field }}
-                {% else %}
-                {% if field.errors %}
-                <div class="field error"></div>
-                {% else %}
-                <div class="field">
+                    {% for field in billing_form %}
+                    {% if field.is_hidden %}
+                    {{ field }}
+                    {% else %}
+                    {% if field.errors %}
+                    <div class="field error"></div>
+                    {% else %}
+                    <div class="field">
+                        {% endif %}
+                        <!--<label>{{ field.label_tag }}</label>-->
+                        {{ field|as_crispy_field }}
+                        {% if field.help_text %}
+                        <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                        <div class="ui error message">
+                            <p>{{ field.errors }}</p>
+                        </div>
+                    </div>
                     {% endif %}
-                    <!--<label>{{ field.label_tag }}</label>-->
-                    {{ field|as_crispy_field }}
-                    {% if field.help_text %}
-                    <p class="help">{{ field.help_text|safe }}</p>
-                    {% endif %}
-                    <div class="ui error message">
-                        <p>{{ field.errors }}</p>
+                    {% endfor %}
+                </div>
+
+                <!-- View selected address -->
+                {%if request.session.stored_address_id %}
+                <div class="col-md-10 col-lg-7 col-xs-12 mb-5">
+                    <h4 class="text-center">Deliver to</h4>
+                    <br>
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{stored_address.name}}</h5>
+                            <p class="card-text">{{stored_address.line_1}}</p>
+                            <p class="card-text">{{stored_address.line_2}}</p>
+                            <p class="card-text">{{stored_address.city}}</p>
+                            <p class="card-text">{{stored_address.country}}-{{stored_address.postcode}}</p>
+                        </div>
                     </div>
                 </div>
                 {% endif %}
-                {% endfor %}
-                </div>
-                </div>
 
-                <!-- Basket items -->
-                <div class="col-md-10 col-lg-5 col-xl-5 col-sm-12 col-xs-12">
-                    <h4 class="text-center">Order Summary</h4>
-                    <hr>
-                    {% for item in basket %}
-                    <div class="font-titillium">
-                        <div class="row no-gutters">
-                            <div class="col-3 d-block mx-auto">
-                                {% for img in item.variant.product.first_image %}
-                                {% if img.caption == item.variant.ref %}
-                                {% image img.image fill-100x100 %}
-                                {% endif %}
-                                {% endfor %}
-                            </div>
 
-                            <div class="col-2">
-                                <div class="card-body">
-                                    <h5 class="text-left">{{ item.variant.product }}</h5>
-                                    <p class="card-text"></p>
-                                    <div class="text-right">
-                                        <span class="card-text"><span class="text-muted">Qty:{{ item.quantity }}</span></span>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <span class="card-text"><span class="text-muted">&#8377;{{ item.variant.price }}</span></span>
-                                    </div>
+            </div>
+
+
+            <!-- Basket items -->
+            <div class="col-md-10 col-lg-5 col-xl-5 col-sm-12 col-xs-12">
+                <h4 class="text-center">Order Summary</h4>
+                <hr>
+                {% for item in basket %}
+                <div class="font-titillium">
+                    <div class="row no-gutters">
+                        <div class="col-3 d-block mx-auto">
+                            {% for img in item.variant.product.first_image %}
+                            {% if img.caption == item.variant.ref %}
+                            {% image img.image fill-100x100 %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-2">
+                            <div class="card-body">
+                                <h5 class="text-left">{{ item.variant.product }}</h5>
+                                <p class="card-text"></p>
+                                <div class="text-right">
+                                    <span class="card-text"><span
+                                            class="text-muted">Qty:{{ item.quantity }}</span></span>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="card-text"><span
+                                    class="text-muted">&#8377;{{ item.variant.price }}</span></span>
                                 </div>
                             </div>
-                            <hr>
                         </div>
                         <hr>
                     </div>
-
-                    {% endfor %}
-
-                    <!-- Total -->
-                    <div class="text-right">
-                        <span class="font-titillium" style="font-size: 3ch">Total:{{total_price}}</span>
-                        <br><br><br>
-                    </div>
+                    <hr>
                 </div>
+
+                {% endfor %}
+
+                <!-- Total -->
+                <div class="text-right">
+                    <span class="font-titillium" style="font-size: 3ch">Total:{{total_price}}</span>
+                    <br><br><br>
+                </div>
+            </div>
+
+
         </div>
 
+        {% for key,value in razorpay.items %}
+        {% if key == "id" %}
+        <script class="razorpay_payment_button"
+                src="https://checkout.razorpay.com/v1/checkout.js"
+                data-key="rzp_test_zr7aWLZBEglyr3"
+                data-order_id={{ value }}
+                data-currency="INR"
+                data-buttontext="Pay with Razorpay"
+                data-name="Miztique"
+                data-description="Purchase Description"
+                data-image=""
+                data-prefill.name="{{user}}"
+                data-prefill.email="{{user.email}}"
+                data-theme.color="#F37254"
 
+        ></script>
+        {% endif %}
+        {% endfor %}
+        <input type="hidden" value="Hidden Element" name="hidden">
 
-
-                {% for key,value in razorpay.items %}
-                {% if key == "id" %}
-                <script class="razorpay_payment_button"
-                        src="https://checkout.razorpay.com/v1/checkout.js"
-                        data-key="rzp_test_zr7aWLZBEglyr3"
-                        data-order_id={{ value }}
-                        data-currency="INR"
-                        data-buttontext="Pay with Razorpay"
-                        data-name="Miztique"
-                        data-description="Purchase Description"
-                        data-image=""
-                        data-prefill.name="{{user}}"
-                        data-prefill.email="{{user.email}}"
-                        data-theme.color="#F37254"
-
-                ></script>
-                {% endif %}
-                {% endfor %}
-                <input type="hidden" value="Hidden Element" name="hidden">
-
-            </form>
-</div>
+    </form>
 </div>
 <br>
 
+{% longclaw_vendors_bundle %}
+{% longclaw_client_bundle %}
 
 {% endblock content %}
 
@@ -186,29 +209,7 @@ The only required field in `checkout_form` is `email`.
     });
 </script>
 
-
-{% longclaw_vendors_bundle %}
-{% longclaw_client_bundle %}
 {% endblock %}
-{#
-Load any client javascript provided by the payment gateway.
-This will give a list of <script/> tags which load the client SDK's.
-An integration might have more than 1 SDK - e.g. braintree offers
-'dropin' and 'hostedfields'. A user should be able to rely on all
-possibilities being loaded or refer to individual gateway documentation.
-#}
-
-
-{% gateway_client_js as scripts %}
-{% for js in scripts %}
-
-{{ js|safe }}
-{% endfor %}
-
-{#
-Finally add the media from the checkout form. This provides the ``initShippingOption`` function
-which will initialize the shipping option dropdown on the checkout form
-#}
 
 
 {{ checkout_form.media }}

@@ -27,16 +27,16 @@
         {% for post in prod %}
         {% with post=post.specific %}
         <div class="col-md-6 col-lg-4 col-xl-4 col-sm-8 col-xs-10 mr-auto">
+            <a href="{% pageurl post %}" class="nounderline">
             <div class="card" style="width: 18rem;">
                 {% image post.images.first.image fill-300x300 class="card-img-top" alt="" %}
                 <div class="card-body">
-                    <a href="{% pageurl post %}">
                         <h4>{{ post.title }}</h4>
-                    </a>
                     <!--<p>{{ post.description|richtext }}</p>-->
                     <p>&#8377;{{ post.price_range.0 }}</p>
                 </div>
             </div>
+                </a>
             <br>
         </div>
         {% endwith %}

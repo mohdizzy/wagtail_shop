@@ -5,12 +5,12 @@
 
 {% block content %}
 
-
+<!-- Change name -->
 <div class="container my-5 font-titillium">
     <h2 class="text-center">Edit Name</h2>
     <br>
     <div class="row">
-        <div class="col-4 mx-auto">
+        <div class="col-md-4 col-xl-4 col-lg-4 col-sm-10 mx-auto">
             <div class="card">
                 <div class="card-body">
                     <p class="card-text">Enter your Name.</p>
@@ -32,25 +32,3 @@
 
 {% endblock %}
 
-{% block extra_js %}
-<script type="text/javascript">
-
-$(".change-name").on('click', function (event) {
-        event.preventDefault();
-        const new_name = $('#new_name').val();
-        $.ajax({
-            type: "POST",
-            url: '',
-            data: {
-                'new_first_name': new_name,
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-            },
-            success: function (data) {
-                console.log(data.success);
-                window.location.href = '{% url 'account-details' %}';
-            }
-        });
-    });
-</script>
-
-{% endblock %}

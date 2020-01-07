@@ -7,8 +7,21 @@
 
 {% block content%}
 
-<p>Thank you for placing the order.</p>
-<p>ID:{{order.order_id}}</p>
 
+<div class="container font-titillium text-center my-5">
+
+
+    <div class="card">
+        <div class="card-body">
+            <p>Thank you for placing the order.</p>
+            <p>Order ID: {{order.order_id}}</p>
+        </div>
+    </div>
+
+</div>
+
+<div class="jumbotron text-center">
+    <h3>Featured content</h3>
+</div>
 
 {% endblock %}

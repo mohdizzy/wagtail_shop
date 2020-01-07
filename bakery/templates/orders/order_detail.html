@@ -4,11 +4,13 @@
 
 {% block content%}
 
+
+<!-- View past orders/invoices -->
 <br><br>
 <div class="container font-titillium">
     <h1 class="font-titillium">Order History</h1>
-    {% regroup orders_user by order_id as order_details %}
-    {% for orders in order_details %}
+    {% regroup orders_user by order.id as order_details %}
+    {% for orders in order_details reversed %}
     <br>
     <br>
     <div class="card w-75 text-center mx-auto">
@@ -24,8 +26,19 @@
                     {% if tup.0 == 2 %}
                     <form method="get" action=".">
                         {%csrf_token%}
-                    <a target="_blank" href="{% url 'invoice' orders.list.0.order.order_id %}">Invoice{{orders.list.0.order.order_id}}</a>
-                        </form>
+                        <a target="_blank" href="{% url 'invoice' orders.list.0.order.order_id %}">
+                            <button class="empty-cart-btn text-left" type="button">View invoice
+                            </button>
+                        </a>
+                    </form>
+                    {% elif tup.0 == 1 %}
+                    <form method="post" action=".">
+                        {%csrf_token%}
+                        <a href="{% url 'refund' %}">
+                            <button class="empty-cart-btn text-left refund" data-orderid="{{orders.list.0.order.id}}" type="button">Refund
+                            </button>
+                        </a>
+                    </form>
                     {% endif %}
                     {% endif %}
                     {% endfor %}
@@ -45,7 +58,7 @@
                 </div>
 
                 <div class="col-md-6 text-left">
-                    <span>{{item.product.ref}}</span>
+                    <span>{{item.product.get_product_title}}</span>
                     <br>
                     <span class="text-muted">Qty:{{item.quantity}}</span>
                 </div>
@@ -61,26 +74,7 @@
     {% endfor %}
 </div>
 
-<!--
-<div>
-    {% regroup orders_user by order_id as country_list %}
 
-{% for od in country_list %}
-    <p>Time:{{od.list.0.order.payment_date}}</p>
-    <p>Order_ID:{{od.list.0.order_id}}</p>
-    <p>Total:{{od.list.0.total}}</p>
-    <ul>
-        {%for ite in od.list%}
-        <li>{{ite.product}}</li>
-        <li>{{ite.quantity}}</li>
-        {% for img in ite.product.first_image %}
-        {% if img.caption == ite.product.ref %}
-        {% image img.image fill-100x100 %}
-        {% endif %}
-        {% endfor %}
-        {%endfor%}
-    </ul>
-{% endfor %}-->
 
 
 </div>
@@ -93,6 +87,17 @@
 
 <script type="text/javascript">
 
+$(".refund").on('click', function (event) {
+        const id_pk = event.currentTarget.dataset.orderid;
+        $.ajax({
+            type: "POST",
+            url: '{% url 'refund' %}',
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}', id: id_pk},
+            success: function (response) {
+                location.reload();
+            }
+        });
+    });
 
 
 </script>

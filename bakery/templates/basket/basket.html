@@ -26,21 +26,15 @@
                     <h5 class="text-left">{{ item.variant.product }}</h5>
                     <p class="card-text"></p>
                     <div class="text-right">
-                    <!--<button href="" class="minuscart" data-quantity="{{item.quantity}}"
-                            data-variant="{{item.variant.id}}">Minus
-                    </button>-->
-                        <label href="" data-quantity="{{item.quantity}}"
-                               data-variant="{{item.variant.id}}" class="minuscart btn btn-simple sub"
+                        <button data-quantity="{{item.quantity}}"
+                               data-variant="{{item.variant.id}}" class="minuscart btn shadow-none sub"
                                style="color:#2A2D34;font-size: 24pt" onmouseover="this.style.color='#FC814A'"
-                               onmouseleave="this.style.color='#2A2D34'">-</label>
+                               onmouseleave="this.style.color='#2A2D34'">-</button>
                     <span class="card-text"><small class="text-muted">{{ item.quantity }}</small></span>
-                    <!--<button href="" class="addcart" data-quantity="{{item.quantity}}"
-                            data-variant="{{item.variant.id}}">add
-                    </button>-->
-                     <label href="" data-quantity="{{item.quantity}}"
-                               data-variant="{{item.variant.id}}" class="addcart btn btn-simple sub"
+                     <button data-quantity="{{item.quantity}}"
+                               data-variant="{{item.variant.id}}" class="addcart btn shadow-none sub"
                                style="color:#2A2D34;font-size: 18pt" onmouseover="this.style.color='#FC814A'"
-                               onmouseleave="this.style.color='#2A2D34'">+</label>
+                               onmouseleave="this.style.color='#2A2D34'" {%if item.variant.stock == 1 %}disabled{%endif%}>+</button>
                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="card-text"><span class="text-muted">{{ item.variant.price }}</span></span>
                     </div>
@@ -90,35 +84,6 @@
 <br>
 <br>
 <br>
-
-
-<!--<div id="basket_items">
-    {% for item in basket %}
-    <p id="basket-item-count">{{ item.quantity }}</p>
-    {{ item.variant.price }}
-    {{ item.variant.ref }}
-
-    {% for img in item.variant.product.first_image %}
-    {% if img.caption == item.variant.ref %}
-    {% image img.image fill-100x100 %}
-    {% endif %}
-    {% endfor %}
-
-
-    {{ item.variant.stock }}
-    {{ item.variant.ref }}
-    {{ item.variant.product.description }}
-    {{ item.variant.id}}
-    <button href="" class="minuscart" data-quantity="{{item.quantity}}"
-            data-variant="{{item.variant.id}}">Minus
-    </button>
-    <button href="" class="addcart" data-quantity="{{item.quantity}}"
-            data-variant="{{item.variant.id}}">add
-    </button>
-</div>
-
-<br>
-{% endfor %}-->
 
 
 

@@ -5,15 +5,17 @@
 
 {% block content %}
 
-
+<!-- Account details -->
 <div class="container my-5 font-titillium">
+    <h2>Your Account</h2>
+    <br>
     <div class="row">
 
-        <div class="col-3 ml-auto">
+        <div class="col-md-3 col-xl-3 col-lg-3 col-sm-10 ml-auto my-2">
             <div class="card">
                 <div class="card-body">
                     <img src="{% static 'images/orders.svg' %}" width="40" height="40">
-                    <p class="card-text">View past orders and status.</p>
+                    <p><small class="card-text text-muted">View orders & status.</small></p>
                     <a href="{% url 'order' %}">
                         <button class="checkout-btn">Show orders</button>
                     </a>
@@ -21,23 +23,23 @@
             </div>
         </div>
 
-        <div class="col-3">
+        <div class="col-md-3 col-xl-3 col-lg-3 col-sm-10 my-2">
             <div class="card">
                 <div class="card-body">
                     <img src="{% static 'images/address.svg' %}" width="40" height="40">
-                    <p class="card-text">Edit addresses.</p>
+                    <p><small class="card-text text-muted">Edit addresses.</small></p>
                     <a href="{% url 'address-manage' %}">
-                        <button class="checkout-btn">View addresses</button>
+                        <button class="checkout-btn">Manage</button>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="col-3 mr-auto">
+        <div class="col-md-3 col-xl-3 col-lg-3 col-sm-10 mr-auto my-2">
             <div class="card">
                 <div class="card-body">
                     <img src="{% static 'images/address.svg' %}" width="40" height="40">
-                    <p class="card-text">Login & Security.</p>
+                    <p><small class="card-text text-muted">Login & Security.</small></p>
                     <a href="{% url 'login-security' %}">
                         <button class="checkout-btn">Manage</button>
                     </a>

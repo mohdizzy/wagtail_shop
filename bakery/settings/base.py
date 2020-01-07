@@ -1,9 +1,13 @@
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import environ
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+env_path = os.path.join(BASE_DIR, '.env')
+environ.Env.read_env()
+env=environ.Env
 
 
 # Quick-start development settings - unsuitable for production
@@ -64,10 +68,12 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_ses',
     'mathfilters',
+    'responsive',
 
 ]
 
 MIDDLEWARE = [
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -80,6 +86,7 @@ MIDDLEWARE = [
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'responsive.middleware.ResponsiveMiddleware',
 ]
 
 DEBUG_TOOLBAR_PANELS = [
@@ -114,17 +121,22 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'longclaw.configuration.context_processors.currency',
                 'wagtail.contrib.settings.context_processors.settings',
+                'responsive.context_processors.device',
             ],
         },
     },
 ]
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         'TIMEOUT': '86400',
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
 
 WSGI_APPLICATION = 'bakery.wsgi.application'
 
@@ -178,7 +190,7 @@ WAGTAIL_SITE_NAME = "bakery"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://example.com'
+BASE_URL = 'http://miztique.io'
 
 # Longclaw settings
 
@@ -203,14 +215,20 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 1
 
+env = environ.Env(
+    AWS_SES_REGION_NAME=str,
+    AWS_SES_ACCESS_KEY_ID=str,
+    AWS_SES_SECRET_ACCESS_KEY=str,
+    AWS_SES_REGION_ENDPOINT=str,
+)
 
 
 EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_SES_ACCESS_KEY_ID = 'AKIARWK5HJ3HRYNLQUMM'
-AWS_SES_SECRET_ACCESS_KEY = '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'
+AWS_SES_ACCESS_KEY_ID = env('AWS_SES_ACCESS_KEY_ID')
+AWS_SES_SECRET_ACCESS_KEY = env('AWS_SES_SECRET_ACCESS_KEY')
 DEFAULT_FROM_EMAIL = 'contact@mohdizzy.com'
-AWS_SES_REGION_NAME = 'eu-west-1'
-AWS_SES_REGION_ENDPOINT = 'email.eu-west-1.amazonaws.com'
+AWS_SES_REGION_NAME = env('AWS_SES_REGION_NAME')
+AWS_SES_REGION_ENDPOINT = env('AWS_SES_REGION_ENDPOINT')
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
@@ -221,6 +239,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_FORMS = {'signup': 'bakery.forms.CustomSignupForm'}
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'mizqtique.io - '
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+

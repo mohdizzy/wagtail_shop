@@ -1,17 +1,16 @@
 from django.views import generic
 from longclaw.configuration.models import Configuration
-from longclaw.orders.models import OrderItem
+from longclaw.orders.models import OrderItem,Order
 
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
-
-from bakery.forms import ProfileForm, NameForm
 from bakery.models import Profile
+from bakery.forms import ProfileForm, NameForm
+from longclaw.shipping.models import UserAddress
 from django.shortcuts import get_object_or_404
 
 User = get_user_model()
 from longclaw.basket.utils import destroy_basket, remove_from_basket
-from longclaw.shipping.models import UserAddress
 try:
     from django.urls import reverse
 except ImportError:
@@ -19,6 +18,7 @@ except ImportError:
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import render_to_pdf
+from catalog.models import ProductVariant
 
 
 
@@ -30,7 +30,7 @@ class OrderDetail(LoginRequiredMixin,generic.ListView):
 
     def get_queryset(self):
         try:
-            self.orders_user = OrderItem.objects.filter(order__email=self.request.user.email).select_related('order')
+            self.orders_user = OrderItem.objects.filter(order__email=self.request.user.email).select_related('order','product')
         except User.DoesNotExist:
             raise Http404
         else:
@@ -74,8 +74,8 @@ class ChangePhoneView(LoginRequiredMixin,generic.UpdateView):
     template_name = "account_details/change_phone.html"
 
     def get_object(self, *args,**kwargs):
-        user = get_object_or_404(User, pk=self.kwargs['pk'])
-        return None
+        user = get_object_or_404(Profile, user_id=self.kwargs['pk'])
+        return user
 
     def get_success_url(self, *args, **kwargs):
         return reverse("account-details")
@@ -86,9 +86,7 @@ class AddressSelectionView(LoginRequiredMixin,generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(AddressSelectionView, self).get_context_data(**kwargs)
-
-        context['stored_address'] = UserAddress.objects.filter(email=str(self.request.user.email)).distinct()
-
+        context['stored_address'] = UserAddress.objects.filter(email=self.request.user.email)
         return context
 
 
@@ -101,6 +99,18 @@ def SelectedAddress(request):
     return HttpResponseRedirect(reverse(
         'longclaw_checkout_view'))
 
+def Refund(request):
+    if request.POST:
+        orderID = request.POST.get('id')
+        order = Order.objects.get(id=orderID)
+        order.refund()
+        order_info = OrderItem.objects.get(order__id=orderID)
+        product_stock = ProductVariant.objects.get(id=order_info.product.id)
+        product_stock.stock = product_stock.stock + order_info.quantity
+        product_stock.save()
+    return HttpResponseRedirect(reverse(
+        'order'))
+
 
 class AddressManageView(LoginRequiredMixin,generic.TemplateView):
     template_name = "address/address_management.html"
@@ -108,14 +118,13 @@ class AddressManageView(LoginRequiredMixin,generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AddressManageView, self).get_context_data(**kwargs)
 
-        context['stored_address'] = UserAddress.objects.filter(email=str(self.request.user.email)).distinct()
+        context['stored_address'] = UserAddress.objects.filter(email=self.request.user.email).distinct()
 
         return context
 
     def post(self, request, *args, **kwargs):
 
-        UserAddress.objects.filter(id=request.POST['delete_address_id']).delete()
-        print("deleted")
+        UserAddress.objects.get(id=request.POST['delete_address_id']).delete(keep_parents=True)
 
         return HttpResponseRedirect(reverse(
             'address-manage'))
@@ -125,7 +134,6 @@ class GeneratePdf(generic.View):
 
     def get(self, request, *args, **kwargs):
         order_info = OrderItem.objects.filter(order__order_id=str(self.kwargs['pk'])).select_related('order')
-        print(order_info)
         invoice_prefix = Configuration.for_site(request.site).invoice_prefix
         inv_data = {
              'invoice': order_info,

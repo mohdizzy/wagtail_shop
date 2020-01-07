@@ -1,10 +1,35 @@
 {% extends "base.html" %}
+{% load wagtailcore_tags static %}
 
 {% block body_class %}template-homepage{% endblock %}
 
-{% block content %}
-    <h1>Welcome to your new Longclaw site!</h1>
+{% comment %}
+<p>This is index page</p>
+<p>#3E92CC</p>
+<p>#454ADE</p>
+<p>#B14AED</p>
+2A2D34
+{% endcomment %}
 
-    <p>You can access the admin interface <a href="{% url 'wagtailadmin_home' %}">here</a> (make sure you have run "./manage.py createsuperuser" in the console first).
+{% block content %}
+
+<header class="masthead" style="background-image: url({% static 'images/homePage.jpg' %});";>
+  <div class="container h-100">
+    <div class="row h-100 align-items-center">
+      <div class="col-12 text-center">
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<!-- Page Content -->
+<section class="py-5">
+  <div class="container">
+    <h2 class="font-weight-light">Page Content</h2>
+    {{ page.body|richtext }}
+  </div>
+</section>
+
 
 {% endblock %}

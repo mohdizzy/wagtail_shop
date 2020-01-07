@@ -32,25 +32,3 @@
 
 {% endblock %}
 
-{% block extra_js %}
-<script type="text/javascript">
-
-$(".change-name").on('click', function (event) {
-        event.preventDefault();
-        const new_name = $('#new_name').val();
-        $.ajax({
-            type: "POST",
-            url: '',
-            data: {
-                'new_first_name': new_name,
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
-            },
-            success: function (data) {
-                console.log(data.success);
-                window.location.href = '{% url 'account-details' %}';
-            }
-        });
-    });
-</script>
-
-{% endblock %}

@@ -34,17 +34,16 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript">
-                    $(document).ready(function () {
-                longclawclient.basketList.get({
-                    prefix: '{% longclaw_api_url_prefix %}',
-                    data: '',
-                }).then(function (response) {
-                    if (response.length != 0) {
-                        $(".basketCount").text(response.length);
-                    }
-
-                });
+        $(document).ready(function () {
+            longclawclient.basketList.get({
+                prefix: '{% longclaw_api_url_prefix %}',
+                data: '',
+            }).then(function (response) {
+                if (response.length != 0) {
+                    $(".basketCount").text(response.length);
+                }
             });
+        });
     </script>
 
 
@@ -70,6 +69,10 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/products" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
                    onmouseleave="this.style.color='#FFFFFF'">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="" style="color:#FFFFFF" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#FFFFFF'">Contact</a>
                 </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item d-xl-none d-lg-none d-md-none d-sm-block d-block">
@@ -203,35 +206,35 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 
-        <script type="text/javascript">
+        <!--<script type="text/javascript">-->
 
-//            $(document).ready(function () {
-//                var api_url = 'api/basket/count/'
-//
-//                    $.ajax({
-//                        url: api_url,
-//                        contentType: "application/json",
-//                        dataType: 'json',
-//                        success: function (result) {
-//                            console.log(result);
-//                            $(".basketCount").text(result.length(id));
-//                        }
-//                    })
-//
-//            });
+            <!--$(document).ready(function () {-->
+                <!--var api_url = 'api/basket/count/'-->
 
-//            $(document).ready(function () {
-//                longclawclient.basketList.get({
-//                    prefix: '{% longclaw_api_url_prefix %}',
-//                    data: '',
-//                }).then(function (response) {
-//                    if (response.length != 0) {
-//                        $(".basketCount").text(response.length);
-//                    }
-//
-//                });
-//            });
-        </script>
+                    <!--$.ajax({-->
+                        <!--url: api_url,-->
+                        <!--contentType: "application/json",-->
+                        <!--dataType: 'json',-->
+                        <!--success: function (result) {-->
+                            <!--console.log(result);-->
+                            <!--$(".basketCount").text(result.length(id));-->
+                        <!--}-->
+                    <!--})-->
+
+            <!--});-->
+
+            <!--$(document).ready(function () {-->
+                <!--longclawclient.basketList.get({-->
+                    <!--prefix: '{% longclaw_api_url_prefix %}',-->
+                    <!--data: '',-->
+                <!--}).then(function (response) {-->
+                    <!--if (response.length != 0) {-->
+                        <!--$(".basketCount").text(response.length);-->
+                    <!--}-->
+
+                <!--});-->
+            <!--});-->
+        <!--</script>-->
         {% block extra_js %}
             {# Override this in templates to add extra javascript #}
         {% endblock %}

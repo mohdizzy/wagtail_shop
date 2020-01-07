@@ -29,6 +29,10 @@ html {
 	opacity: 0.8;
 }
 
+.nounderline {
+  text-decoration: none !important
+}
+
 .top-nav-color{
     background-color: #3C0000;
 }

@@ -3,7 +3,7 @@
 
 {% block content %}
 
-
+<!-- Account address management  -->
 <br><br>
 <div class="container font-titillium">
     <h1>Your Addresses</h1>
@@ -11,9 +11,9 @@
     <form action="." method="post" class="" id="checkout-form">
         <div class="row">
             {% if user.is_authenticated %}
-                {% if stored_address %}
+                {% if stored_address.0.country != None %}
                     {% for stored_address in stored_address %}
-                    <div class="col-4 my-4">
+                    <div class="col-md-4 col-xl-4 col-lg-4 col-sm-10 col-xs-10 my-4">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">{{stored_address.name}}</h5>
@@ -53,13 +53,13 @@
 $(".delete-address").on('click', function (event) {
         event.preventDefault();
         const delete_address_id = event.currentTarget.dataset.variant;
-        console.log(address_id)
+        console.log(delete_address_id)
         $.ajax({
             type: "POST",
             url: '',
             data: {
                 'delete_address_id': delete_address_id,
-                'csrfmiddlewaretoken': '{{ csrf_token }}',
+                csrfmiddlewaretoken: '{{ csrf_token }}',
             },
             success: function (data) {
                 console.log(data);

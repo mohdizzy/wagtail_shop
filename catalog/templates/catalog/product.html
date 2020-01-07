@@ -13,27 +13,38 @@
 <br>
 <br>
 
-<div class="product_content row no-gutters">
-    <div class="image col-2">
-        {% if page.images %}
+<div class="row no-gutters">
+
+    <!-- Desktop image viewer -->
+    {% if page.images %}
+    <div class="d-sm-none d-md-block d-none col-md-2">
         <div id="thumbs" style="float: left; margin: 10px">
         {% for item in page.images.all %}
-            {% image item.image fill-100x100 %}
+            {% image item.image fill-400x400 width="100" height="100" %}
             <br><br>
         {% endfor %}
         </div>
-        {% else %}
-        <img style="width: 450px; background-color: #ECEFF1;" src="..."/>
+    </div>
+
+    <div class="col-md-5 col-xs-8 img-responsive">
+        <img id="largeImage" width="350" height="350" class="img-responsive">
+    </div>
+
+    <!-- Mobile image viewer -->
+     <div class="d-sm-block d-md-none col-xs-10">
+        <div id="thumbs" style="float: left; margin: 10px">
+        {% for item in page.images.all %}
+            {% image item.image fill-400x400 width="100" height="100" %}
+            &nbsp;
+        {% endfor %}
         </div>
-        {% endif %}
-    </div>
-
-    <div class="col-5">
-        <img id="largeImage" width="300" height="300">
-    </div>
+     </div>
+    {% endif %}
 
 
-    <div class="product_content_info col-4">
+    {% if device.width > 1025 %}
+    <!-- Desktop view -->
+    <div class="col-md-4 col-xs-8 d-sm-none d-md-block d-none">
         <h1 class="font-titillium">{{ page.title }}</h1>
 
 
@@ -47,18 +58,18 @@
             {% endfor %}
         </select>
         &nbsp;&nbsp;&nbsp;&nbsp;
-            <!--<button type="button" id="sub" class="sub">-</button>
-            <input readonly type="number" id="multi_variant_qty_cart" value="1" min="1" max="10"/>
-            <button type="button" id="add" class="add">+</button>-->
-            <label href="" id="sub" class="btn btn-simple sub" style="color:#2A2D34;font-size: 24pt"
+            <button id="sub" class="btn shadow-none sub" style="color:#2A2D34;font-size: 24pt"
                    onmouseover="this.style.color='#FC814A'"
-                   onmouseleave="this.style.color='#2A2D34'">-</label>
+                   onmouseleave="this.style.color='#2A2D34'">-</button>
             &nbsp;<input readonly type="text" id="multi_variant_qty_cart" value="1" size="1" min="1" max="10"/>
-            <label href="" id="add" class="btn btn-simple add" style="color:#2A2D34;font-size: 20pt"
+            <button id="add" class="btn shadow-none add" style="color:#2A2D34;font-size: 20pt"
                    onmouseover="this.style.color='#FC814A'"
-                   onmouseleave="this.style.color='#2A2D34'">+</label>
+                   onmouseleave="this.style.color='#2A2D34'">+</button>
         <br>
         <button type="button" id="add-to-basket-btn" class="add-to-cart">ADD TO CART</button>
+        <br>
+        <br>
+        <div id="stock_alert" style="color: red" class="font-titillium"></div>
 
         {% else %}
 
@@ -67,14 +78,16 @@
             {% if variant.stock > 0 %}
             <span class="font-titillium text-muted">&#x20B9;{{variant.price}}</span>
             <div>
-                <label href="" id="sub" class="btn btn-simple sub" style="color:#2A2D34;font-size: 24pt" onmouseover="this.style.color='#FC814A'"
-                   onmouseleave="this.style.color='#2A2D34'">-</label>
+                <button type="button" id="sub" class="btn sub shadow-none" style="color:#2A2D34;font-size: 24pt;" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">-</button>
                 &nbsp;<input readonly type="text" id="qty_cart" size="1" value="1" min="1" max="{% if variant.stock > 10 %} 10{%else%}{{variant.stock}}{%endif%}"/>
-                <label href="" id="add" class="btn btn-simple add" style="color:#2A2D34;font-size: 20pt" onmouseover="this.style.color='#FC814A'"
-                   onmouseleave="this.style.color='#2A2D34'">+</label>
+                <button href="" id="add" class="btn shadow-none add" style="color:#2A2D34;font-size: 20pt" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'" {%if variant.stock == 1 %}disabled{%endif%}>+</button>
             </div>
             <br>
             <button type="button" id="add-to-basket-btn" value="{{variant.id}}" stock="{{variant.stock}}" class="add-to-cart">ADD TO CART</button>
+            <br><br>
+            <div id="stock_alert" style="color: red" class="font-titillium"></div>
             {% else %}
             <span class="label label-danger">Sold out</span>
             {% endif %}
@@ -98,7 +111,157 @@
 
         </div>
     </div>
-    <div class="col-1"></div>
+
+
+    {% elif device.width < 1025 and device.width > 576 %}
+
+    <!-- Medium view -->
+    <div class="col-md-4 col-xs-8 d-sm-none d-md-block d-none">
+        <h1 class="font-titillium" >{{ page.title }}</h1>
+
+
+        <!-- Product with 2 variants -->
+        {% if page.variants.all.count > 1 %}
+        <span class="font-titillium text-muted">Starting from &#x20B9;{{page.variants.all.0.product.price_range.1}}</span>
+        <br><br>
+        <div class="text-center">
+        <select id="variant-select" class="custom-select w-auto">
+            {% for variant in page.variants.all %}
+            <option value="{{variant.id}}" stock="{{variant.stock}}" {% if variant.stock < 1 %}disabled{%else%}{%endif%}>{{variant.ref}} - &#x20B9;{{variant.price}}</option>
+            {% endfor %}
+        </select>
+        <br>
+            <button id="sub" class="btn shadow-none sub" style="color:#2A2D34;font-size: 24pt"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">-</button>
+            &nbsp;<input readonly type="text" id="multi_variant_qty_cart" value="1" size="1" min="1" max="10"/>
+            <button id="add" class="btn shadow-none add" style="color:#2A2D34;font-size: 20pt"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">+</button>
+        <br>
+        <button type="button" id="add-to-basket-btn" class="add-to-cart">ADD TO CART</button>
+            </div>
+        <br>
+        <br>
+        <div id="stock_alert" style="color: red" class="font-titillium"></div>
+
+        {% else %}
+
+            <!-- Product with single variant -->
+            {% for variant in page.variants.all %}
+            {% if variant.stock > 0 %}
+            <span class="font-titillium text-muted">&#x20B9;{{variant.price}}</span>
+            <div class="text-center">
+                <button type="button" id="sub" class="btn sub shadow-none" style="color:#2A2D34;font-size: 24pt;" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">-</button>
+                &nbsp;<input readonly type="text" id="qty_cart" size="1" value="1" min="1" max="{% if variant.stock > 10 %} 10{%else%}{{variant.stock}}{%endif%}"/>
+                <button href="" id="add" class="btn shadow-none add" style="color:#2A2D34;font-size: 20pt" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'" {%if variant.stock == 1 %}disabled{%endif%}>+</button>
+                <br>
+                <button type="button" id="add-to-basket-btn" value="{{variant.id}}" stock="{{variant.stock}}"
+                        class="add-to-cart">ADD TO CART
+                </button>
+            </div>
+            <br><br>
+            <div id="stock_alert" style="color: red" class="font-titillium"></div>
+            {% else %}
+            <span class="label label-danger">Sold out</span>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <br><br>
+        <div class="w-70"><span class="font-titillium">{{ page.description|richtext }}</span></div>
+        <div class="mx-auto">
+            <span>Share</span>
+            &nbsp;
+            <a href="http://www.instagram.com/miztique.io/" target="_blank"><img
+                    src="{% static 'images/icons8-instagram.svg' %}"
+                    width="30"
+                    height="30"></a>
+            &nbsp;
+            <a href="http://twitter.com/mohd_izzy" target="_blank"><img
+                    src="{% static 'images/icons8-twitter-filled.svg' %}"
+                    width="30" height="30"></a>
+            &nbsp;
+
+        </div>
+    </div>
+
+    {% elif device.width < 577  and device.width > 0%}
+
+    <!-- Mobile view -->
+    <div class="col-md-4 col-xs-8 d-sm-block d-md-none">
+        <h1 class="font-titillium" >{{ page.title }}</h1>
+
+
+        <!-- Product with 2 variants -->
+        {% if page.variants.all.count > 1 %}
+        <span class="font-titillium text-muted">Starting from &#x20B9;{{page.variants.all.0.product.price_range.1}}</span>
+        <br><br>
+        <div class="text-center">
+        <select id="variant-select" class="custom-select w-auto">
+            {% for variant in page.variants.all %}
+            <option value="{{variant.id}}" stock="{{variant.stock}}" {% if variant.stock < 1 %}disabled{%else%}{%endif%}>{{variant.ref}} - &#x20B9;{{variant.price}}</option>
+            {% endfor %}
+        </select>
+        <br>
+            <button id="sub" class="btn shadow-none sub" style="color:#2A2D34;font-size: 24pt"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">-</button>
+            &nbsp;<input readonly type="text" id="multi_variant_qty_cart" value="1" size="1" min="1" max="10"/>
+            <button id="add" class="btn shadow-none add" style="color:#2A2D34;font-size: 20pt"
+                   onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">+</button>
+            <br>
+            <button type="button" id="add-to-basket-btn" class="add-to-cart">ADD TO CART</button>
+        </div>
+        <br>
+        <br>
+        <div id="stock_alert" style="color: red" class="font-titillium"></div>
+
+        {% else %}
+
+            <!-- Product with single variant -->
+            {% for variant in page.variants.all %}
+            {% if variant.stock > 0 %}
+            <span class="font-titillium text-muted">&#x20B9;{{variant.price}}</span>
+            <div class="text-center">
+                <button type="button" id="sub" class="btn sub shadow-none" style="color:#2A2D34;font-size: 24pt;" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'">-</button>
+                &nbsp;<input readonly type="text" id="qty_cart" size="1" value="1" min="1" max="{% if variant.stock > 10 %} 10{%else%}{{variant.stock}}{%endif%}"/>
+                <button href="" id="add" class="btn shadow-none add" style="color:#2A2D34;font-size: 20pt" onmouseover="this.style.color='#FC814A'"
+                   onmouseleave="this.style.color='#2A2D34'" {%if variant.stock == 1 %}disabled{%endif%}>+</button>
+            <br>
+            <button type="button" id="add-to-basket-btn" value="{{variant.id}}" stock="{{variant.stock}}" class="add-to-cart">ADD TO CART</button>
+                </div>
+            <br><br>
+            <div id="stock_alert" style="color: red" class="font-titillium"></div>
+            {% else %}
+            <span class="label label-danger">Sold out</span>
+            {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <br><br>
+        <div class="w-70"><span class="font-titillium">{{ page.description|richtext }}</span></div>
+        <div class="mx-auto">
+            <span>Share</span>
+            &nbsp;
+            <a href="http://www.instagram.com/miztique.io/" target="_blank"><img
+                    src="{% static 'images/icons8-instagram.svg' %}"
+                    width="30"
+                    height="30"></a>
+            &nbsp;
+            <a href="http://twitter.com/mohd_izzy" target="_blank"><img
+                    src="{% static 'images/icons8-twitter-filled.svg' %}"
+                    width="30" height="30"></a>
+            &nbsp;
+
+        </div>
+    </div>
+    {%endif%}
+
 </div>
 {% if page.tags.all.count %}
 <div class="tags">
@@ -120,88 +283,90 @@
                                            onmouseleave="this.style.color='#2A2D34'">&#x2190;BACK TO PRODUCTS</a>
 </div>
 
+<div class="jumbotron" style="height: 500px">
+    <h4 class="text-center">Featured Content</h4>
+</div>
+
 
 
 {% longclaw_vendors_bundle %}
 {% longclaw_client_bundle %}
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
 
+{% endblock %}
+
+{% block extra_js %}
 <script type="text/javascript">
 
 
     const btn_cart = document.getElementById('add-to-basket-btn');
 
-
     const variant_select = document.getElementById('variant-select');
-
-    console.log(variant_select);
 
     const variantId = $('#add-to-basket-btn').val();
 
-    const maxAtt = $('#multi_variant_qty_cart').attr("max") == null ? $('#qty_cart').attr("max") : $('#multi_variant_qty_cart').attr("max") ;
+    const maxAtt = $('#multi_variant_qty_cart').attr("max") == null ? $('#qty_cart').attr("max") : $('#multi_variant_qty_cart').attr("max");
 
 
 
 
-        btn_cart.addEventListener("click", (e) => {
-            e.preventDefault();
+        if (btn_cart) {
+            btn_cart.addEventListener("click", (e) => {
+                e.preventDefault();
             const variant_id = variant_select == null ? variantId : variant_select.options[variant_select.selectedIndex].value;
-            console.log(variant_id);
-
 
             const quantity = $('#multi_variant_qty_cart').val() == null ? Number($('#qty_cart').val()) : Number($('#multi_variant_qty_cart').val());
-
 
             const multi_variant_stock = $('#variant-select').find(':selected').attr("stock");
             const stock = multi_variant_stock == null ? Number($('#add-to-basket-btn').attr("stock")) : Number(multi_variant_stock);
 
-            if(stock >= quantity && quantity<11){
-              longclawclient.basketList.post({
-                prefix: "{% longclaw_api_url_prefix %}",
-                data: { variant_id, quantity:quantity }
-              }).then(function (response) {
-                  if (response.status == 201) {
-                      location.reload();
-                  }
-              });
-          }else{
-            window.alert("Stock left"+multi_variant_stock);
-          }
-      });
-
-
-
-        $(document).ready(function() {
-           $('#largeImage').attr('src',$('#thumbs img').attr('src').replace('thumb','large'));
-       });
-
-        $('#thumbs img').click(function(){
-            $('#largeImage').attr('src',$(this).attr('src').replace('thumb','large'));
-
-        });
-
-        $('.add').click(function () {
-            if ($(this).prev().val() < Number(maxAtt)) {
-                $(this).prev().val(+$(this).prev().val() + 1);
+            (function (){
+                 longclawclient.basketDetailCount.get({
+                prefix: '{% longclaw_api_url_prefix %}',
+                urlParams: {"id":variant_id},
+                    }).then(function (response) {
+                     stock_disabled = response.quantity;
+                if (stock >= quantity && quantity < 11 && stock != response.quantity) {
+                longclawclient.basketList.post({
+                    prefix: "{% longclaw_api_url_prefix %}",
+                    data: {variant_id, quantity: quantity}
+                }).then(function (response) {
+                    if (response.status == 201) {
+                        location.reload();
+                    }
+                });
+            } else {
+//                window.alert("Stock left: " + multi_variant_stock);
+                    document.getElementById('stock_alert').innerHTML='Only 1 remaining in stock'
             }
+            });
+            }());
+
+
         });
-        $('.sub').click(function () {
-            if ($(this).next().val() > 1) {
-                if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
-            }
-        });
+        }
+
+
+    $(document).ready(function () {
+        $('#largeImage').attr('src', $('#thumbs img').attr('src').replace('thumb', 'large'));
+    });
+
+    $('#thumbs img').click(function () {
+        $('#largeImage').attr('src', $(this).attr('src').replace('thumb', 'large'));
+
+    });
+
+    $('.add').click(function () {
+        if ($(this).prev().val() < Number(maxAtt)) {
+            $(this).prev().val(+$(this).prev().val() + 1);
+        }
+    });
+    $('.sub').click(function () {
+        if ($(this).next().val() > 1) {
+            if ($(this).next().val() > 1) $(this).next().val(+$(this).next().val() - 1);
+        }
+    });
+
 
 </script>
-
-
 {% endblock %}
-

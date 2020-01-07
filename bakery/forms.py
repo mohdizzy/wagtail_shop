@@ -41,6 +41,10 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ('phone',)
 
+    def __init__(self, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self['phone'].initial = ''
+
     def clean_phone(self):
         cleaned_data = self.cleaned_data['phone']
 
@@ -64,6 +68,9 @@ class NameForm(forms.ModelForm):
         model = User
         fields = ('first_name',)
 
+    def __init__(self, *args, **kwargs):
+        super(NameForm, self).__init__(*args, **kwargs)
+        self['first_name'].initial = ''
 
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']

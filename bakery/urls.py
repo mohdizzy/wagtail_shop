@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls import include, url
+from django.urls import path
 from django.contrib import admin
 
 from search import views as search_views
@@ -10,13 +11,14 @@ from wagtail.documents import urls as wagtaildocs_urls
 from longclaw import urls as longclaw_urls
 from home import views
 from . import views as mainView
+from django.views.decorators.cache import cache_page
 
 
 urlpatterns = [
-    url(r'^$', views.IndexPage.as_view(), name="index"),
-    url(r'^home/', views.HomePage.as_view(), name="home"),
+    #url(r'^$', views.IndexPage.as_view(), name="index"),
+    #url(r'^$', views.HomePage.as_view(), name="home"),
     url(r'^delete-cart/', mainView.deletecart, name='delete-cart'),
-    url(r'^address-select/', mainView.AddressSelectionView.as_view(), name='address-select'),
+    url(r'^basket/address-select/', mainView.AddressSelectionView.as_view(), name='address-select'),
     url(r'^selected-address/', mainView.SelectedAddress, name='selected-address'),
     url(r'^account-details/$', mainView.AccountDetailsView.as_view(), name="account-details"),
     url(r'^account-details/login_security/$', mainView.LoginSecurityView.as_view(), name="login-security"),
@@ -24,6 +26,7 @@ urlpatterns = [
         name="change-name"),
     url(r'^account-details/orders/$', mainView.OrderDetail.as_view(), name="order"),
     url(r'^account-details/orders/invoice/(?P<pk>\d+)/', mainView.GeneratePdf.as_view(), name="invoice"),
+    url(r'^account-details/orders/refund/', mainView.Refund, name="refund"),
     url(r'^account-details/address-manage/$', mainView.AddressManageView.as_view(), name='address-manage'),
     url(r'^account-details/login_security/change_number/(?P<pk>\d+)/edit/', mainView.ChangePhoneView.as_view(),
         name="change-number"),
@@ -50,6 +53,12 @@ if settings.DEBUG:
     import debug_toolbar
 
     # Serve static and media files from development server
+    urlpatterns = [
+                      path('__debug__/', include(debug_toolbar.urls)),
+
+                      # For django versions before 2.0:
+                      # url(r'^__debug__/', include(debug_toolbar.urls)),
+
+                  ] + urlpatterns
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += url(r'^__debug__/', include(debug_toolbar.urls)),
