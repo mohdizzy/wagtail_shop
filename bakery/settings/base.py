@@ -3,6 +3,7 @@
 import os
 import environ
 
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 env_path = os.path.join(BASE_DIR, '.env')
@@ -69,6 +70,8 @@ INSTALLED_APPS = [
     'django_ses',
     'mathfilters',
     'responsive',
+    'storages',
+    'zappa_django_utils',
 
 ]
 
@@ -183,6 +186,26 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+#
+# # S3 settings
+# AWS_STORAGE_BUCKET_NAME = 'wagshop'
+# AWS_S3_REGION_NAME = 'eu-west-1'  # e.g. us-east-2
+#
+#
+#
+# # Tell django-storages the domain to use to refer to static files.
+# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+#
+# # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+# # you run `collectstatic`).
+# STATICFILES_LOCATION = 'static'
+# STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+#
+#
+# MEDIAFILES_LOCATION = 'media'
+# DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+
+
 
 # Wagtail settings
 
@@ -216,10 +239,8 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1
 
 env = environ.Env(
-    AWS_SES_REGION_NAME=str,
     AWS_SES_ACCESS_KEY_ID=str,
     AWS_SES_SECRET_ACCESS_KEY=str,
-    AWS_SES_REGION_ENDPOINT=str,
 )
 
 
@@ -227,8 +248,8 @@ EMAIL_BACKEND = 'django_ses.SESBackend'
 AWS_SES_ACCESS_KEY_ID = env('AWS_SES_ACCESS_KEY_ID')
 AWS_SES_SECRET_ACCESS_KEY = env('AWS_SES_SECRET_ACCESS_KEY')
 DEFAULT_FROM_EMAIL = 'contact@mohdizzy.com'
-AWS_SES_REGION_NAME = env('AWS_SES_REGION_NAME')
-AWS_SES_REGION_ENDPOINT = env('AWS_SES_REGION_ENDPOINT')
+AWS_SES_REGION_NAME='eu-west-1'
+AWS_SES_REGION_ENDPOINT='email.eu-west-1.amazonaws.com'
 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
