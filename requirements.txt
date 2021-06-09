@@ -8,7 +8,7 @@ cfn-flip==1.2.2
 chardet==3.0.4
 Click==7.0
 defusedxml==0.6.0
-Django==2.2.2
+Django==2.2.22
 django-allauth==0.39.1
 django-appconf==1.0.3
 django-countries==5.3.3
